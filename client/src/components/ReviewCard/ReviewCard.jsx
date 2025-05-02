@@ -13,7 +13,7 @@ const ReviewCard = () => {
                    <a href="#"> <img src="https://cdn.marvel.com/content/1x/thunderbolts_lob_crd_03.jpg" className="rounded w-full object-cover border-2 border-zinc-600" /></a>
                 </div>
                 <div className="w-4/5">
-                    <p className='text-sm text-zinc-500 mb-3'>
+                    <p className='text-sm text-zinc-500 mb-3 text-ellips-2'>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat eum similique itaque exercitationem odio nesciunt delectus, voluptate qui aliquam unde.
                     </p>
                     <div className="flex text-amber-400 text-sm my-2">
