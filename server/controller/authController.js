@@ -46,12 +46,11 @@ export const registerUser = async (req, res) => {
 
         genrateToken(res, savedUser._id);
 
-        sendEmail(savedUser.email, "Welcome to Cinematrix", "welcome", {username: savedUser.username, website_url: process.env.CLIENT_URL});
+        sendEmail(savedUser.email, "Welcome to Cinematrix", "welcome", { username: savedUser.username, website_url: process.env.CLIENT_URL });
 
         return res.status(201).json({
             success: true,
-            messgae: `${username} is successfully registred.`,
-            savedUser
+            messgae: `${username} is successfully registred.`
         })
 
 
@@ -65,3 +64,54 @@ export const registerUser = async (req, res) => {
     }
 }
 
+export const loginUser = async (req, res) => {
+
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({
+            success: false,
+            messgae: "Missing data"
+        })
+    }
+
+    try {
+
+        const findUser = await User.findOne({
+            $or: [{ username }, { email: username }]
+        })
+
+        if (!findUser) {
+            return res.status(400).json({
+                success: false,
+                messgae: `${username} not found.`
+            })
+        }
+
+        const MatchPassword = await bcrypt.compare(password, findUser.password);
+
+        if (!MatchPassword) {
+            return res.status(400).json({
+                success: false,
+                messgae: `Incorrect password.`
+            })
+        }
+
+        
+        
+
+        genrateToken(res, findUser._id);
+
+        return res.status(200).json({
+            success: true,
+            messgae: `logged in`
+        })
+
+    } catch (error) {
+        console.log(`🤖 can't login User :: ${error}`);
+        return res.status(500).json({
+            success: false,
+            messgae: "Internal Server Error"
+        });
+    }
+}
