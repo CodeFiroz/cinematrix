@@ -162,7 +162,7 @@ export const sendResetLink = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(`🤖 can't login User :: ${error}`);
+        console.log(`can't send reset link :: ${error}`);
         return res.status(500).json({
             success: false,
             messgae: "Internal Server Error"
@@ -201,8 +201,8 @@ export const ResetPassword = async (req, res) => {
             })
         }
 
-        
-        if(findUser.resetTokenExpire < Date.now()){
+
+        if (findUser.resetTokenExpire < Date.now()) {
             return res.status(400).json({
                 success: false,
                 messgae: `Token has expired.`
@@ -225,7 +225,7 @@ export const ResetPassword = async (req, res) => {
 
         await findUser.save();
 
-        sendEmail(findUser.email, "Password Changed", "reset-password", {username: findUser.username});
+        sendEmail(findUser.email, "Password Changed", "reset-password", { username: findUser.username });
 
         return res.status(200).json({
             success: true,
@@ -233,10 +233,46 @@ export const ResetPassword = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(`🤖 can't login User :: ${error}`);
+        console.log(`can't reset password :: ${error}`);
         return res.status(500).json({
             success: false,
             messgae: "Internal Server Error"
         });
+    }
+}
+
+export const getCurrentUser = async (req, res) => {
+    try {
+
+        const { user } = req.user;
+
+        return res.status(200).json({
+            success: true,
+            messgae: `signed in user`,
+            user
+        })
+
+    } catch (error) {
+        console.log(`can't get user :: ${error}`);
+        return res.status(500).json({
+            success: false,
+            messgae: "Internal Server Error"
+        });
+    }
+}
+
+export const logoutUser = (req, res) => {
+    try {
+
+        res.clearCookie("authToken");
+
+        res.status(200).json({
+            success: true,
+            message: "logout succesfully ✅"
+        })
+
+    } catch (err) {
+        console.log(`logout error :: ${err}`);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 }
