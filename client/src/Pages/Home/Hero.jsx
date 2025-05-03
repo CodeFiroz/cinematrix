@@ -20,10 +20,9 @@ const Hero = () => {
 
                     <a 
                     href="#"
-                    className='px-4 py-2 rounded-full bg-amber-400 text-zinc-800 font-bold border-4 border-amber-500 uppercase duration-300 ease-in-out hover:scale-95'
+                    className='px-4 py-2 text-center rounded-full bg-amber-400 text-zinc-800 font-bold border-4 border-amber-500 uppercase duration-300 ease-in-out hover:scale-95'
                     >
-                        Popular Movies & Shows
-                    </a>
+                        Popular                     </a>
 
                     <a 
                     href="#"
