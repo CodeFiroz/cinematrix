@@ -7,10 +7,12 @@ import express from "express"
 import {config} from "dotenv"
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import connectDB from "./config/dbcofig.js";
 
 const app = express();
 
 config(); // config dotenv
+connectDB(); //connect mongoose database
 
 const PORT = process.env.PORT || 3000; // define PORT
 
