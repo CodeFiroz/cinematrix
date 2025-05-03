@@ -241,6 +241,59 @@ export const ResetPassword = async (req, res) => {
     }
 }
 
+export const changePassword = async (req, res) => {
+    const { oldpassword, newpassword } = req.params;
+    const { user } = res.user;
+
+    if (!oldpassword || !newpassword) {
+        return res.status(400).json({
+            success: false,
+            messgae: "empty new password"
+        })
+    }
+
+    try {
+
+        const findUser = await User.findById(user.userid);
+
+        if (!findUser) {
+            return res.status(400).json({
+                success: false,
+                messgae: `user not found`
+            })
+        }
+
+        const MatchPassword = await bcrypt.compare(oldpassword, findUser.password);
+
+        if (!MatchPassword) {
+            return res.status(400).json({
+                success: false,
+                messgae: `Incorrect password.`
+            })
+        } 
+
+        const hashPassword = await bcrypt.hash(newpassword, 10);
+
+        findUser.password = hashPassword;
+
+        await findUser.save();
+
+        sendEmail(findUser.email, "Password Changed", "reset-password", { username: findUser.username });
+
+        return res.status(200).json({
+            success: true,
+            messgae: `Password is changed`
+        })
+
+    } catch (error) {
+        console.log(`can't reset password :: ${error}`);
+        return res.status(500).json({
+            success: false,
+            messgae: "Internal Server Error"
+        });
+    }
+}
+
 export const getCurrentUser = async (req, res) => {
     try {
 
