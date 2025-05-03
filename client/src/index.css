@@ -4,24 +4,24 @@
 @import "tailwindcss";
 
 
-*{
+* {
   font-family: "Figtree", sans-serif;
 
 }
 
-html{
+html {
   scroll-behavior: smooth;
 }
 
 .font-bebas,
-.font-bebas *{
+.font-bebas * {
   font-family: "Bebas Neue", sans-serif !important;
 }
 
-.text-ellips-2{
+.text-ellips-2 {
   display: -webkit-box;
-    max-width: 100%;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  max-width: 100%;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

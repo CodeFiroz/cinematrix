@@ -42,7 +42,7 @@ const Header = () => {
                                 className=" w-8 h-8 rounded-full object-cover"
                             />
                             <span className="text-sm font-semibold text-zinc-400">Walter White</span>
-                            <div className={`w-50 bg-stone-900 p-1 rounded absolute right-0 top-14 ${profileMenu ? 'block' : 'hidden'}`}>
+                            <div className={`w-50 bg-stone-900 p-1 rounded absolute z-50 right-0 top-14 ${profileMenu ? 'block' : 'hidden'}`}>
                                 <a href="#"
                                     className="flex items-center gap-3 px-2 py-1 rounded hover:bg-stone-700 hover:text-white"
                                 >

@@ -41,7 +41,7 @@ const ReviewCard = () => {
                     <div className="flex items-center gap-2 mt-3">
 
 <a href="#">
-    <img src="https://www.esquireme.com/wp-content/uploads/sites/9/cloud/2021/09/09/deadpool-1563973577.jpg" class="w-6 h-6 rounded-full object-cover" />
+    <img src="https://www.esquireme.com/wp-content/uploads/sites/9/cloud/2021/09/09/deadpool-1563973577.jpg" className="w-6 h-6 rounded-full object-cover" />
 </a>
 
 <h5 className='font-bebas'>
