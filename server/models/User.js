@@ -19,7 +19,6 @@ const UserSchema = mongoose.Schema({
     },
     password: {
         type: String,
-        unique: true,
         required: true
     },
     bio: {
@@ -28,12 +27,10 @@ const UserSchema = mongoose.Schema({
     },
     resetToken : {
         type: String,
-        unique: true,
         default: null
     },    
     resetTokenExpire : {
         type: Date,
-        unique: true,
         default: null
     }
 });

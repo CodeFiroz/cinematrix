@@ -9,6 +9,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/dbcofig.js";
 
+import authRoutes from "./routes/authRoutes.js"
+
 const app = express();
 
 config(); // config dotenv
@@ -25,6 +27,8 @@ app.use(cors({
   credentials: true,
 }));
 
+
+app.use("/api/auth", authRoutes);
 
 // start server
 app.listen(PORT, ()=>{
