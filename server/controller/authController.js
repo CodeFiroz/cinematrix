@@ -1,4 +1,5 @@
 import { genrateToken } from "../library/authToken.js";
+import sendEmail from "../library/SendMail.js";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 
@@ -45,6 +46,8 @@ export const registerUser = async (req, res) => {
 
         genrateToken(res, savedUser._id);
 
+        sendEmail(savedUser.email, "Welcome to Cinematrix", "welcome", {username: savedUser.username, website_url: process.env.CLIENT_URL});
+
         return res.status(201).json({
             success: true,
             messgae: `${username} is successfully registred.`,
@@ -53,7 +56,7 @@ export const registerUser = async (req, res) => {
 
 
     } catch (error) {
-        console.log(`🫥 can't register User :: ${error}`);
+        console.log(`🤖 can't register User :: ${error}`);
         return res.status(500).json({
             success: false,
             messgae: "Internal Server Error"
@@ -61,3 +64,4 @@ export const registerUser = async (req, res) => {
 
     }
 }
+
