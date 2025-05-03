@@ -2,6 +2,7 @@ import { genrateToken } from "../library/authToken.js";
 import sendEmail from "../library/SendMail.js";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"
 
 export const registerUser = async (req, res) => {
 
@@ -97,14 +98,67 @@ export const loginUser = async (req, res) => {
             })
         }
 
-        
-        
+
+
 
         genrateToken(res, findUser._id);
 
         return res.status(200).json({
             success: true,
             messgae: `logged in`
+        })
+
+    } catch (error) {
+        console.log(`🤖 can't login User :: ${error}`);
+        return res.status(500).json({
+            success: false,
+            messgae: "Internal Server Error"
+        });
+    }
+}
+
+export const sendResetLink = async (req, res) => {
+    const { username } = req.body;
+
+    if (!username) {
+        return res.status(400).json({
+            success: false,
+            messgae: "Missing data"
+        })
+    }
+
+    try {
+
+        const findUser = await User.findOne({
+            $or: [{ username }, { email: username }]
+        })
+
+        if (!findUser) {
+            return res.status(400).json({
+                success: false,
+                messgae: `${username} not found.`
+            })
+        }
+
+        const UserEmail = findUser.email;
+
+        const newResetToken = jwt.sign({
+            userid: findUser._id
+        }, process.env.JWT_SECRET, { expiresIn: '15m' });
+
+        const resetLink = `${process.env.CLIENT_URL}/reset-password/${newResetToken}`;
+        const hashToken = await bcrypt.hash(newResetToken, 10);
+
+        findUser.resetToken = newResetToken;
+        findUser.resetTokenExpire = Date.now() + 15 * 60 * 1000;
+
+        await findUser.save();
+
+        sendEmail(UserEmail, "Reset Your Password", "reset-link", { resetLink: resetLink, username: findUser.username })
+
+        return res.status(200).json({
+            success: true,
+            messgae: `reset email is send`
         })
 
     } catch (error) {
