@@ -8,12 +8,24 @@ import Login from './Pages/Auth/Login'
 import ForgotPassword from './Pages/Auth/ForgotPassword'
 import ResetPassword from './Pages/Auth/ResetPassword'
 
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+
 const App = () => {
   return (
     <>
+
+    <BrowserRouter>
       <Header />
-      <ResetPassword  />
+      <Routes>
+        <Route path='/' element={<Home />}></Route>
+        <Route path='/movie/:id' element={<Movie />}></Route>
+        <Route path='/login' element={<Login />}></Route>
+        <Route path='/register' element={<Register />}></Route>
+        <Route path='/forgot-password' element={<ForgotPassword />}></Route>
+        <Route path='/reset-password' element={<ResetPassword />}></Route>
+      </Routes>
       <Footer />
+    </BrowserRouter>
     </>
   )
 }
