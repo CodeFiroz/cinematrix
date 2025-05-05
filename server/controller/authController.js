@@ -11,7 +11,7 @@ export const registerUser = async (req, res) => {
     if (!username || !email || !password) {
         return res.status(400).json({
             success: false,
-            messgae: "Missing data"
+            message: "Missing data"
         })
     }
 
@@ -22,7 +22,7 @@ export const registerUser = async (req, res) => {
         if (findUserByUsername) {
             return res.status(409).json({
                 success: false,
-                messgae: `${username} is already registred.`
+                message: `${username} is already registred.`
             })
         }
 
@@ -31,7 +31,7 @@ export const registerUser = async (req, res) => {
         if (findUserByEmail) {
             return res.status(409).json({
                 success: false,
-                messgae: `${email} is already registred.`
+                message: `${email} is already registred.`
             })
         }
 
@@ -51,7 +51,7 @@ export const registerUser = async (req, res) => {
 
         return res.status(201).json({
             success: true,
-            messgae: `${username} is successfully registred.`
+            message: `${username} is successfully registred.`
         })
 
 
@@ -59,7 +59,7 @@ export const registerUser = async (req, res) => {
         console.log(`🤖 can't register User :: ${error}`);
         return res.status(500).json({
             success: false,
-            messgae: "Internal Server Error"
+            message: "Oops! We're having server issues. Try again later."
         });
 
     }
@@ -70,9 +70,10 @@ export const loginUser = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
+        
         return res.status(400).json({
             success: false,
-            messgae: "Missing data"
+            message: "Please enter your email or username.",
         })
     }
 
@@ -85,7 +86,8 @@ export const loginUser = async (req, res) => {
         if (!findUser) {
             return res.status(400).json({
                 success: false,
-                messgae: `${username} not found.`
+                field: "username",
+                message: `No account found with this email / username.`
             })
         }
 
@@ -94,7 +96,8 @@ export const loginUser = async (req, res) => {
         if (!MatchPassword) {
             return res.status(400).json({
                 success: false,
-                messgae: `Incorrect password.`
+                field: "password",
+                message: `Incorrect password. Please try again.`
             })
         }
 
@@ -105,14 +108,14 @@ export const loginUser = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            messgae: `logged in`
+            message: `logged in`
         })
 
     } catch (error) {
         console.log(`🤖 can't login User :: ${error}`);
         return res.status(500).json({
             success: false,
-            messgae: "Internal Server Error"
+            message: "Oops! We're having server issues. Try again later."
         });
     }
 }
@@ -123,7 +126,7 @@ export const sendResetLink = async (req, res) => {
     if (!username) {
         return res.status(400).json({
             success: false,
-            messgae: "Missing data"
+            message: "Missing data"
         })
     }
 
@@ -136,7 +139,7 @@ export const sendResetLink = async (req, res) => {
         if (!findUser) {
             return res.status(400).json({
                 success: false,
-                messgae: `${username} not found.`
+                message: `${username} not found.`
             })
         }
 
@@ -158,14 +161,14 @@ export const sendResetLink = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            messgae: `reset email is send`
+            message: `reset email is send`
         })
 
     } catch (error) {
         console.log(`can't send reset link :: ${error}`);
         return res.status(500).json({
             success: false,
-            messgae: "Internal Server Error"
+            message: "Oops! We're having server issues. Try again later."
         });
     }
 }
@@ -177,14 +180,14 @@ export const ResetPassword = async (req, res) => {
     if (!token) {
         return res.status(400).json({
             success: false,
-            messgae: "no token found"
+            message: "no token found"
         })
     }
 
     if (!password) {
         return res.status(400).json({
             success: false,
-            messgae: "empty new password"
+            message: "empty new password"
         })
     }
 
@@ -197,7 +200,7 @@ export const ResetPassword = async (req, res) => {
         if (!findUser) {
             return res.status(400).json({
                 success: false,
-                messgae: `Invalid or expired token`
+                message: `Invalid or expired token`
             })
         }
 
@@ -205,7 +208,7 @@ export const ResetPassword = async (req, res) => {
         if (findUser.resetTokenExpire < Date.now()) {
             return res.status(400).json({
                 success: false,
-                messgae: `Token has expired.`
+                message: `Token has expired.`
             });
         }
 
@@ -213,7 +216,7 @@ export const ResetPassword = async (req, res) => {
         if (!isValidToken) {
             return res.status(400).json({
                 success: false,
-                messgae: `Invalid or expired token`
+                message: `Invalid or expired token`
             })
         }
 
@@ -229,14 +232,14 @@ export const ResetPassword = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            messgae: `Password is changed`
+            message: `Password is changed`
         })
 
     } catch (error) {
         console.log(`can't reset password :: ${error}`);
         return res.status(500).json({
             success: false,
-            messgae: "Internal Server Error"
+            message: "Oops! We're having server issues. Try again later."
         });
     }
 }
@@ -248,7 +251,7 @@ export const changePassword = async (req, res) => {
     if (!oldpassword || !newpassword) {
         return res.status(400).json({
             success: false,
-            messgae: "empty new password"
+            message: "empty new password"
         })
     }
 
@@ -259,7 +262,7 @@ export const changePassword = async (req, res) => {
         if (!findUser) {
             return res.status(400).json({
                 success: false,
-                messgae: `user not found`
+                message: `user not found`
             })
         }
 
@@ -268,7 +271,7 @@ export const changePassword = async (req, res) => {
         if (!MatchPassword) {
             return res.status(400).json({
                 success: false,
-                messgae: `Incorrect password.`
+                message: `Incorrect password.`
             })
         } 
 
@@ -282,14 +285,14 @@ export const changePassword = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            messgae: `Password is changed`
+            message: `Password is changed`
         })
 
     } catch (error) {
         console.log(`can't reset password :: ${error}`);
         return res.status(500).json({
             success: false,
-            messgae: "Internal Server Error"
+            message: "Oops! We're having server issues. Try again later."
         });
     }
 }
@@ -301,7 +304,7 @@ export const getCurrentUser = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            messgae: `signed in user`,
+            message: `signed in user`,
             user
         })
 
@@ -309,7 +312,7 @@ export const getCurrentUser = async (req, res) => {
         console.log(`can't get user :: ${error}`);
         return res.status(500).json({
             success: false,
-            messgae: "Internal Server Error"
+            message: "Oops! We're having server issues. Try again later."
         });
     }
 }
@@ -326,6 +329,6 @@ export const logoutUser = (req, res) => {
 
     } catch (err) {
         console.log(`logout error :: ${err}`);
-        return res.status(500).json({ success: false, message: "Internal server error" });
+        return res.status(500).json({ success: false, message: "Oops! We're having server issues. Try again later." });
     }
 }

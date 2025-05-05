@@ -1,6 +1,9 @@
 import { useState } from "react"
 import InputField from "../../components/InputField/InputField";
 import PasswordField from "../../components/InputField/PasswordField";
+import { Link } from "react-router-dom"
+import axios from "axios"
+import toast, {Toaster} from "react-hot-toast"
 
 const Login = () => {
 
@@ -29,13 +32,13 @@ const Login = () => {
 
   }
 
-  const handleLogin = (e) => {
+  const clearErrors = () => setFormErrors({ username: '', password: '' });
+
+  
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    setFormErrors({
-      username: '',
-      password: ''
-    });
+    clearErrors();
 
     let hasError = false;
 
@@ -51,7 +54,30 @@ const Login = () => {
     }
 
     if (!hasError) {
-      alert("Submit")
+
+      try{
+        const loginResponse = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, formdata, {withCredentials: true,});
+      }catch(error){
+
+        if (error.response){
+
+          const { field, message } = error.response.data;
+
+          if (field && message) {
+            setError(field, message);
+          } else if (error) {
+            toast.error(error);
+          } else {
+            toast.error("Login failed. Try again.");
+          }
+
+        }else {
+      // 👇 Network error, no server response
+      toast.error("Server unreachable. Internet okay?");
+    }
+
+      }
+ 
     }
 
   }
@@ -59,6 +85,7 @@ const Login = () => {
   return (
     <>
 
+<Toaster />
       <div className="min-h-screen bg-[#0C0A09] flex items-center justify-center px-4">
         <div className="bg-[#1A1A1A] text-white p-8 rounded-2xl shadow-lg max-w-md w-full">
 
@@ -86,7 +113,7 @@ const Login = () => {
             <PasswordField
               id="password"
               label="Password"
-              placeholder="******"
+              placeholder="••••••••"
               name="password"
               value={formdata.password}
               onChange={handleChange}
@@ -106,7 +133,7 @@ const Login = () => {
           </div>
 
           <p className="text-xs text-gray-500 text-center mt-6">
-            Don't have an account?  <a href="/login" className="text-[#FFB900] underline">Sign up here</a>.
+            Don't have an account?  <Link to="/register" className="text-[#FFB900] underline">Sign up here</Link>.
           </p>
         </div>
       </div>

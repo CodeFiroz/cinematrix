@@ -22,11 +22,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(cors({
-  "origin": "*",
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true,
+  origin: process.env.CLIENT_URL,  // frontend origin
+  credentials: true,                // allow cookies/auth headers
 }));
-
 
 app.use("/api/auth", authRoutes);
 
