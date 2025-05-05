@@ -24,6 +24,7 @@ const Register = () => {
       <div>
         <label className="block mb-1 text-sm text-gray-300">Password</label>
         <input type="password" className="w-full px-4 py-2 rounded bg-[#0C0A09] border border-gray-700 focus:outline-none focus:border-[#FFB900]" placeholder="••••••••" />
+       
       </div>
       <button type="submit" className="w-full bg-[#FFB900] text-[#0C0A09] py-2 rounded cursor-pointer font-bold hover:bg-[#e0a800] transition-all">
         Register
