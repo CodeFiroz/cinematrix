@@ -11,7 +11,7 @@ export const registerUser = async (req, res) => {
     if (!username || !email || !password) {
         return res.status(400).json({
             success: false,
-            message: "Missing data"
+            message: "Please enter your username, email and password.",
         })
     }
 
@@ -22,7 +22,8 @@ export const registerUser = async (req, res) => {
         if (findUserByUsername) {
             return res.status(409).json({
                 success: false,
-                message: `${username} is already registred.`
+                field: "username",
+                message: `This username is already in use. Try something unique.`
             })
         }
 
@@ -31,7 +32,8 @@ export const registerUser = async (req, res) => {
         if (findUserByEmail) {
             return res.status(409).json({
                 success: false,
-                message: `${email} is already registred.`
+                field: "email",
+                message: `${email} is already registered.`
             })
         }
 

@@ -2,6 +2,8 @@ import InputField from "../../components/InputField/InputField";
 import PasswordField from "../../components/InputField/PasswordField";
 import { useState } from "react";
 import { Link } from "react-router-dom"
+import toast, {Toaster} from "react-hot-toast";
+import axios from "axios";
 
 const Register = () => {
 
@@ -35,7 +37,7 @@ const Register = () => {
   const clearErrors = () => setFormErrors({ username: '', email: '', password: '' });
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
 
@@ -66,13 +68,36 @@ const Register = () => {
     }
 
     if (!hasError) {
-      alert("Submit")
+     
+      try {
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, formdata, { withCredentials: true, });
+        toast.success("Successfully Registred");
+      } catch (error) {
+
+        if (error.response) {
+
+          const { field, message } = error.response.data;
+
+          if (field && message) {
+            setError(field, message);
+          } else if (error) {
+            toast.error(error);
+          } else {
+            toast.error("Register failed. Try again.");
+          }
+
+        } else {
+          toast.error("Server unreachable. Internet okay?");
+        }
+
+      }
+
     }
   }
 
   return (
     <>
-
+<Toaster />
       <div className="min-h-screen bg-[#0C0A09] flex items-center justify-center px-4">
         <div className="bg-[#1A1A1A] text-white p-8 rounded-2xl shadow-lg max-w-md w-full">
 
