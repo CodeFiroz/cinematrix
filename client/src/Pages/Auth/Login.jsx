@@ -7,6 +7,8 @@ import toast, { Toaster } from "react-hot-toast"
 
 const Login = () => {
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formdata, setFormdata] = useState({
     username: '',
     password: ''
@@ -52,13 +54,20 @@ const Login = () => {
       setError("password", "Please enter your password");
       hasError = true;
     }
-
+    
     if (!hasError) {
+      setIsLoading(true)
 
       try {
         await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, formdata, { withCredentials: true, });
         toast.success("Successfully login");
+        setFormdata({
+          username: '',
+          password: ''
+        })
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
 
         if (error.response) {
 
@@ -121,14 +130,25 @@ const Login = () => {
             />
 
 
-            <button type="submit" className="w-full bg-[#FFB900] text-[#0C0A09] py-2 rounded cursor-pointer font-bold hover:bg-[#e0a800] transition-all">
-              Login
+            {
+              isLoading  ? (
+                <button type="button" disabled className="w-full bg-neutral-700 text-zinc-500 py-2 rounded cursor-none font-bold">
+            Logging in...
             </button>
+              ) : (
+                <button type="submit" className="w-full bg-[#FFB900] text-[#0C0A09] py-2 rounded cursor-pointer font-bold hover:bg-[#e0a800] transition-all">
+                Login
+              </button>
+              )
+            }
+          
+
+            
           </form>
 
           <div className="text-right">
 
-            <a href="/login" className="text-[#FFB900] underline text-xs">Forgot Password ?</a>
+            <Link to="/forgot-password" className="text-[#FFB900] underline text-xs">Forgot Password ?</Link>
 
           </div>
 

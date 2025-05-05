@@ -7,6 +7,8 @@ import axios from "axios";
 
 const Register = () => {
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formdata, setFormdata] = useState({
     username: '',
     email: '',
@@ -66,15 +68,26 @@ const Register = () => {
       setError("password", "Please create your password");
       hasError = true;
     }
-
+  
+    
     if (!hasError) {
+      setIsLoading(true)
      
       try {
         await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, formdata, { withCredentials: true, });
         toast.success("Successfully Registred");
+        setFormdata({
+          username: '',
+          email: '',
+          password: ''
+        })
+        setIsLoading(false);
       } catch (error) {
 
+        setIsLoading(false);
+        
         if (error.response) {
+          setIsLoading(false);
 
           const { field, message } = error.response.data;
 
@@ -143,10 +156,20 @@ const Register = () => {
               error={formerrors.password}
             />
 
-
-            <button type="submit" className="w-full bg-[#FFB900] text-[#0C0A09] py-2 rounded cursor-pointer font-bold hover:bg-[#e0a800] transition-all">
-              Register
+{
+              isLoading  ? (
+                <button type="button" disabled className="w-full bg-neutral-700 text-zinc-500 py-2 rounded cursor-none font-bold">
+            Signing you up...
             </button>
+              ) : (
+                <button type="submit" className="w-full bg-[#FFB900] text-[#0C0A09] py-2 rounded cursor-pointer font-bold hover:bg-[#e0a800] transition-all">
+                Register
+              </button>
+              )
+            }
+
+
+           
           </form>
 
           <p className="text-xs text-gray-500 text-center mt-6">

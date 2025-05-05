@@ -128,7 +128,7 @@ export const sendResetLink = async (req, res) => {
     if (!username) {
         return res.status(400).json({
             success: false,
-            message: "Missing data"
+            message: "Please enter your email or username.",
         })
     }
 
@@ -141,7 +141,7 @@ export const sendResetLink = async (req, res) => {
         if (!findUser) {
             return res.status(400).json({
                 success: false,
-                message: `${username} not found.`
+                message: `No account found with this email / username.`
             })
         }
 
@@ -189,7 +189,8 @@ export const ResetPassword = async (req, res) => {
     if (!password) {
         return res.status(400).json({
             success: false,
-            message: "empty new password"
+            field: "password",
+            message: "Please create a password"
         })
     }
 
