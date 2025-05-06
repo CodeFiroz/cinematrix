@@ -24,3 +24,27 @@ export const movieslist = async (key) => {
 
 
 }
+
+export const movie = async (id) => {
+    
+    try{
+        const MovieResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/movies/${id}`);
+        
+        
+
+        return {
+            success: true,
+            movies: MovieResponse.data,
+        }
+
+    }catch(error){
+        return {
+            success: false,
+            message: error
+        }
+    }
+    
+
+
+
+}

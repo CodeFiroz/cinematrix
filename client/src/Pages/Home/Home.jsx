@@ -7,41 +7,28 @@ import { useState, useEffect } from "react"
 
 const Home = () => {
 
-    const [popularMovies, setPopularMovies] = useState([]);
-    const [topRatedMovie, setTopRatedMovies] = useState([]);
+    const useFetchMovies = (type) => {
+        const [movies, setMovies] = useState([]);
 
-    useEffect(() => {
-        const fetchPopularMovies = async () => {
-            const PopularMovieresult = await movieslist("popular");
+        useEffect(() => {
+            const fetchMovies = async () => {   
+                const result = await movieslist(type);
+                if (result.success) {
+                    setMovies(result.movies.slice(0, 12)); 
+                } else {
+                    console.error(`Failed to fetch ${type} movies:`, result.message);
+                }
+            };
 
-            if (PopularMovieresult.success) {
+            fetchMovies();
+        }, [type]);
 
-                setPopularMovies(PopularMovieresult.movies);
-
-
-
-            } else {
-                console.error("Failed to fetch movies:", PopularMovieresult.message);
-            }
-
-            const TopRatedMovieresult = await movieslist("top_rated");
-
-            if (TopRatedMovieresult.success) {
-
-                setTopRatedMovies(TopRatedMovieresult.movies);
+        return movies;
+    };
 
 
-
-            } else {
-                console.error("Failed to fetch movies:", TopRatedMovieresult.message);
-            }
-        };
-
-        fetchPopularMovies();
-    }, []);
-
-
-
+    const popularMovies = useFetchMovies("popular");
+    const topRatedMovies = useFetchMovies("top_rated");
 
 
 
@@ -93,6 +80,7 @@ const Home = () => {
                                 <MovieCard
                                     image={`https://media.themoviedb.org/t/p/w220_and_h330_face/${movie.backdrop_path}`}
                                     title={movie.title}
+                                    id={movie.id}
                                 />
                             ))
                         }
@@ -102,19 +90,20 @@ const Home = () => {
                     <h3
                         className="text-3xl font-bebas text-zinc-300 mt-15 mb-5"
                     >
-                       Top Rated Movies 
+                        Top Rated Movies
                     </h3>
                     <div className="grid grid-cols-3 lg:grid-cols-6 gap-5 mb-20">
 
 
-                    {
-                            topRatedMovie.slice(0, 12).map((movie) => (
+                        {
+                            topRatedMovies.slice(0, 12).map((movie) => (
 
 
                                 <MovieCard
-                                    image={`https://media.themoviedb.org/t/p/w220_and_h330_face/${movie.backdrop_path}`}
-                                    title={movie.title}
-                                />
+                                image={`https://media.themoviedb.org/t/p/w220_and_h330_face/${movie.backdrop_path}`}
+                                title={movie.title}
+                                id={movie.id}
+                            />
                             ))
                         }
 

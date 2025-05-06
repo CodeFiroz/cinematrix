@@ -1,4 +1,5 @@
 import MovieListCache from "../models/MovieListCache.js";
+import MoviesCache from "../models/MoviesCache.js";
 import axios from "axios";
 
 export const getMoviesList = async (req, res) => {
@@ -69,6 +70,69 @@ export const getMoviesList = async (req, res) => {
 
     } catch (err) {
         console.log(`movie list fetching error :: ${err}`);
+        return res.status(500).json({ success: false, message: "Oops! We're having server issues. Try again later." });
+    }
+
+}
+
+export const getMovie = async (req, res) => {
+
+
+    const { id } = req.params;
+
+    try {
+
+        if (id == "") {
+            return res.status(400).json({
+                success: false,
+                message: "Please give a search key"
+            })
+        }
+
+       
+
+        const cache = await MoviesCache.findOne({ movie_id: id });
+
+        if (cache) {
+            console.log("Serving from database cache 👴");
+            return res.json(cache.data);
+        }
+
+        console.log("Fetching from TMDB 🌐");
+
+        const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US`;
+
+        const options = {
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+            }
+        };
+
+        const tmdbResponse  = await axios.get(url, options);
+
+
+
+        const movieDetail = tmdbResponse.data; 
+        
+        
+
+
+        
+
+            const saveCache = new MoviesCache({
+                movie_id: id, 
+                data: movieDetail, 
+            })
+
+            await saveCache.save();
+
+       
+
+       return res.json(movieDetail);
+
+    } catch (err) {
+        console.log(`movie fetching error :: ${err}`);
         return res.status(500).json({ success: false, message: "Oops! We're having server issues. Try again later." });
     }
 

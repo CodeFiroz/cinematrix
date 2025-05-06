@@ -19,7 +19,6 @@ export const useAuthStore = create(
         set({ loading: true });
         try {
           const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/auth/me`, { withCredentials: true });
-          console.log(res.data.user);
           
           set({
             user: res.data.user,
