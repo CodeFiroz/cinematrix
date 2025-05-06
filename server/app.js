@@ -10,6 +10,7 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/dbcofig.js";
 
 import authRoutes from "./routes/authRoutes.js"
+import movieRoutes from "./routes/movieRoutes.js"
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(cors({
 }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/movies", movieRoutes);
 
 // start server
 app.listen(PORT, ()=>{
