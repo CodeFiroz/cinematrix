@@ -9,23 +9,34 @@ import ForgotPassword from './Pages/Auth/ForgotPassword'
 import ResetPassword from './Pages/Auth/ResetPassword'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { useAuthStore } from './store/authStore'
+import { useEffect } from 'react'
+
 
 const App = () => {
+
+  const checkAuth = useAuthStore((state) => state.checkAuth);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+
   return (
     <>
 
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path='/' element={<Home />}></Route>
-        <Route path='/movie/:id' element={<Movie />}></Route>
-        <Route path='/login' element={<Login />}></Route>
-        <Route path='/register' element={<Register />}></Route>
-        <Route path='/forgot-password' element={<ForgotPassword />}></Route>
-        <Route path='/reset-password' element={<ResetPassword />}></Route>
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path='/' element={<Home />}></Route>
+          <Route path='/movie/:id' element={<Movie />}></Route>
+          <Route path='/login' element={<Login />}></Route>
+          <Route path='/register' element={<Register />}></Route>
+          <Route path='/forgot-password' element={<ForgotPassword />}></Route>
+          <Route path='/reset-password/:token' element={<ResetPassword />}></Route>
+        </Routes>
+        <Footer />
+      </BrowserRouter>
     </>
   )
 }

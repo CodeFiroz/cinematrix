@@ -53,7 +53,12 @@ export const registerUser = async (req, res) => {
 
         return res.status(201).json({
             success: true,
-            message: `${username} is successfully registred.`
+            message: `${username} is successfully registred.`,
+            user: {
+                "pfp": savedUser.profile_picture,
+                "username": savedUser.username,
+                "email": savedUser.email,
+            }
         })
 
 
@@ -110,7 +115,12 @@ export const loginUser = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: `logged in`
+            message: `logged in`,
+            user: {
+                "pfp": findUser.profile_picture,
+                "username": findUser.username,
+                "email": findUser.email
+            }
         })
 
     } catch (error) {
@@ -308,7 +318,10 @@ export const getCurrentUser = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: `signed in user`,
-            user
+            user: {
+                "username": req.user.username,
+                "email": req.user.email
+            } 
         })
 
     } catch (error) {

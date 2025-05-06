@@ -4,8 +4,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom"
 import toast, {Toaster} from "react-hot-toast";
 import axios from "axios";
+import { useAuthStore } from "../../store/authStore.js";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  
+  const navigate = useNavigate();
+
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -74,7 +80,11 @@ const Register = () => {
       setIsLoading(true)
      
       try {
-        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, formdata, { withCredentials: true, });
+        const registerRes = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, formdata, { withCredentials: true, });
+
+        setAuth({ user: registerRes.data.user });
+
+
         toast.success("Successfully Registred");
         setFormdata({
           username: '',
@@ -82,6 +92,9 @@ const Register = () => {
           password: ''
         })
         setIsLoading(false);
+
+        navigate("/")
+
       } catch (error) {
 
         setIsLoading(false);

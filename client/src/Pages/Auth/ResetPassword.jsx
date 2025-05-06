@@ -69,7 +69,7 @@ const ResetPassword = () => {
         <div className="bg-[#1A1A1A] text-white p-8 rounded-2xl shadow-lg max-w-md w-full">
 
           <h2 className="text-3xl font-bold text-center font-bebas uppercase tracking-wide">
-            Reset Your Password
+            Reset Your Password 
           </h2>
           <p className="text-sm text-gray-400 text-center mt-2">
             Enter your new password below. Let’s get you back to binge-watching.

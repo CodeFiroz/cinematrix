@@ -5,13 +5,20 @@ import { Link } from "react-router-dom"
 import axios from "axios"
 import toast, { Toaster } from "react-hot-toast"
 
+import { useAuthStore } from "../../store/authStore.js";
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
+
+  const setAuth = useAuthStore((state) => state.setAuth);
+
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const [formdata, setFormdata] = useState({
-    username: '',
-    password: ''
+    username: 'khanfiroz4045@gmail.com',
+    password: '12345678'
   });
 
   const [formerrors, setFormErrors] = useState({
@@ -59,13 +66,19 @@ const Login = () => {
       setIsLoading(true)
 
       try {
-        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, formdata, { withCredentials: true, });
+        const loginResponse = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, formdata, { withCredentials: true, });
+        setAuth({ user: loginResponse.data.user });
+
+        
         toast.success("Successfully login");
         setFormdata({
           username: '',
           password: ''
         })
         setIsLoading(false);
+
+        navigate("/")
+
       } catch (error) {
         setIsLoading(false);
 

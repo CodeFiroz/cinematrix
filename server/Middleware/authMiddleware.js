@@ -25,7 +25,7 @@ const protectRoute = async (req, res, next) => {
             })
         }
 
-        req.user = { findUser };
+        req.user = findUser;
 
         next();
 
