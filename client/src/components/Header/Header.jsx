@@ -18,12 +18,12 @@ const Header = () => {
                     className="flex items-center justify-between gap-3 w-full lg:max-w-8/10 p-2 border-b-1 border-stone-800"
                 >
 
-                    <a
-                        href="#"
+                    <Link
+                        to="/"
                         className="text-3xl uppercase font-bebas text-white"
                     >
                         Cine<span className="text-amber-400">matrix.</span>
-                    </a>
+                    </Link>
 
                     <div className="flex items-center">
 

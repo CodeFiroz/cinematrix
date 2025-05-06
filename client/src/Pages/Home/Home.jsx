@@ -2,7 +2,49 @@ import MovieCard from "../../components/MovieCard/MovieCard"
 import ReviewCard from "../../components/ReviewCard/ReviewCard"
 import Hero from "./Hero"
 
+import { movieslist } from "../../apis/movies"
+import { useState, useEffect } from "react"
+
 const Home = () => {
+
+    const [popularMovies, setPopularMovies] = useState([]);
+    const [topRatedMovie, setTopRatedMovies] = useState([]);
+
+    useEffect(() => {
+        const fetchPopularMovies = async () => {
+            const PopularMovieresult = await movieslist("popular");
+
+            if (PopularMovieresult.success) {
+
+                setPopularMovies(PopularMovieresult.movies);
+
+
+
+            } else {
+                console.error("Failed to fetch movies:", PopularMovieresult.message);
+            }
+
+            const TopRatedMovieresult = await movieslist("top_rated");
+
+            if (TopRatedMovieresult.success) {
+
+                setTopRatedMovies(TopRatedMovieresult.movies);
+
+
+
+            } else {
+                console.error("Failed to fetch movies:", TopRatedMovieresult.message);
+            }
+        };
+
+        fetchPopularMovies();
+    }, []);
+
+
+
+
+
+
     return (
         <>
 
@@ -39,32 +81,43 @@ const Home = () => {
                     <h3
                         className="text-3xl font-bebas text-zinc-300 my-5"
                     >
-                        Movies of the month
+                        Popular Movies
                     </h3>
                     <div className="grid grid-cols-3 lg:grid-cols-6 gap-5">
 
-                        <MovieCard />
-                        <MovieCard />
-                        <MovieCard />
-                        <MovieCard />
-                        <MovieCard />
-                        <MovieCard />
+
+                        {
+                            popularMovies.slice(0, 12).map((movie) => (
+
+
+                                <MovieCard
+                                    image={`https://media.themoviedb.org/t/p/w220_and_h330_face/${movie.backdrop_path}`}
+                                    title={movie.title}
+                                />
+                            ))
+                        }
 
                     </div>
 
                     <h3
                         className="text-3xl font-bebas text-zinc-300 mt-15 mb-5"
                     >
-                        Movies of the month
+                       Top Rated Movies 
                     </h3>
                     <div className="grid grid-cols-3 lg:grid-cols-6 gap-5 mb-20">
 
-                        <MovieCard />
-                        <MovieCard />
-                        <MovieCard />
-                        <MovieCard />
-                        <MovieCard />
-                        <MovieCard />
+
+                    {
+                            topRatedMovie.slice(0, 12).map((movie) => (
+
+
+                                <MovieCard
+                                    image={`https://media.themoviedb.org/t/p/w220_and_h330_face/${movie.backdrop_path}`}
+                                    title={movie.title}
+                                />
+                            ))
+                        }
+
 
                     </div>
 
