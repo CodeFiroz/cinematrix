@@ -13,8 +13,10 @@ const Home = () => {
         useEffect(() => {
             const fetchMovies = async () => {   
                 const result = await movieslist(type);
+                console.log(result);
+                
                 if (result.success) {
-                    setMovies(result.movies.slice(0, 12)); 
+                    setMovies(result.movies.data.slice(0, 12)); 
                 } else {
                     console.error(`Failed to fetch ${type} movies:`, result.message);
                 }
@@ -27,7 +29,7 @@ const Home = () => {
     };
 
 
-    const popularMovies = useFetchMovies("popular");
+    const popularMovies = useFetchMovies("upcoming");
     const topRatedMovies = useFetchMovies("top_rated");
 
 
@@ -74,13 +76,14 @@ const Home = () => {
 
 
                         {
-                            popularMovies.slice(0, 12).map((movie) => (
+                            popularMovies.slice(0, 12).map((movie, index) => (
 
 
                                 <MovieCard
-                                    image={`https://media.themoviedb.org/t/p/w220_and_h330_face/${movie.backdrop_path}`}
+                                    image={`https://media.themoviedb.org/t/p/w220_and_h330_face/${movie.poster_path}`}
                                     title={movie.title}
                                     id={movie.id}
+                                    key={index}
                                 />
                             ))
                         }
@@ -96,13 +99,14 @@ const Home = () => {
 
 
                         {
-                            topRatedMovies.slice(0, 12).map((movie) => (
+                            topRatedMovies.slice(0, 12).map((movie, index) => (
 
 
                                 <MovieCard
-                                image={`https://media.themoviedb.org/t/p/w220_and_h330_face/${movie.backdrop_path}`}
+                                image={`https://media.themoviedb.org/t/p/w220_and_h330_face/${movie.poster_path}`}
                                 title={movie.title}
                                 id={movie.id}
+                                key={index}
                             />
                             ))
                         }

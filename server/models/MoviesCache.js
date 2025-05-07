@@ -6,7 +6,7 @@ const MoviesCacheSchema = mongoose.Schema({
         required: true,
     },
     data: {
-        type: Array,
+        type: Object,
         required: true,
     },
 }, {timestamps: true});

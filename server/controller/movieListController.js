@@ -4,20 +4,20 @@ import axios from "axios";
 
 export const getMoviesList = async (req, res) => {
 
-    const validkeys = ["popular","now_playing", "top_rated", "upcoming"];
+    const validkeys = ["popular", "now_playing", "top_rated", "upcoming"];
 
     const { key } = req.params;
 
     try {
 
-        if (key == "") {
+        if (!key) {
             return res.status(400).json({
                 success: false,
                 message: "Please give a search key"
             })
         }
 
-        if(!validkeys.includes(key)){
+        if (!validkeys.includes(key)) {
             return res.status(400).json({
                 success: false,
                 message: "invalid key"
@@ -31,7 +31,10 @@ export const getMoviesList = async (req, res) => {
 
         if (cache && now - cache.lastFetched < SIX_HOURS) {
             console.log("Serving from database cache 👴");
-            return res.json(cache.data);
+            return res.status(200).json({
+                success: true,
+                data : cache.data
+            });
         }
 
         console.log("Fetching from TMDB 🌐");
@@ -45,9 +48,9 @@ export const getMoviesList = async (req, res) => {
             }
         };
 
-        const tmdbResponse  = await axios.get(url, options);
-        const movies = tmdbResponse .data.results; 
-        
+        const tmdbResponse = await axios.get(url, options);
+        const movies = tmdbResponse.data.results;
+
 
 
         if (cache) {
@@ -57,8 +60,8 @@ export const getMoviesList = async (req, res) => {
         } else {
 
             const saveCache = new MovieListCache({
-                type: key, 
-                data: movies, 
+                type: key,
+                data: movies,
                 lastFetched: now
             })
 
@@ -66,7 +69,10 @@ export const getMoviesList = async (req, res) => {
 
         }
 
-        res.json(movies);
+        return res.status(200).json({
+            success: true,
+            data : movies
+        });
 
     } catch (err) {
         console.log(`movie list fetching error :: ${err}`);
@@ -82,20 +88,23 @@ export const getMovie = async (req, res) => {
 
     try {
 
-        if (id == "") {
+        if (!id) {
             return res.status(400).json({
                 success: false,
                 message: "Please give a search key"
             })
         }
 
-       
+
 
         const cache = await MoviesCache.findOne({ movie_id: id });
 
         if (cache) {
             console.log("Serving from database cache 👴");
-            return res.json(cache.data);
+            return res.status(200).json({
+                success: true,
+                data : cache.data
+            });
         }
 
         console.log("Fetching from TMDB 🌐");
@@ -109,27 +118,25 @@ export const getMovie = async (req, res) => {
             }
         };
 
-        const tmdbResponse  = await axios.get(url, options);
+        const tmdbResponse = await axios.get(url, options);
 
+        const movieDetail = tmdbResponse.data;
 
-
-        const movieDetail = tmdbResponse.data; 
-        
-        
-
-
+        console.log(movieDetail);
         
 
-            const saveCache = new MoviesCache({
-                movie_id: id, 
-                data: movieDetail, 
-            })
+        const saveCache = new MoviesCache({
+            movie_id: id,
+            data: movieDetail,
+        })
 
-            await saveCache.save();
+        await saveCache.save();
 
-       
 
-       return res.json(movieDetail);
+        return res.status(200).json({
+            success: true,
+            data : movieDetail
+        });
 
     } catch (err) {
         console.log(`movie fetching error :: ${err}`);

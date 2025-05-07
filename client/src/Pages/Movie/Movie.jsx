@@ -15,7 +15,9 @@ const Movie = () => {
         const fetchMovies = async () => {
             const result = await movie(id);
             if (result.success) {
-                setMovie(result.movies[0]);
+                setMovie(result.movies.data);
+                console.log(result);
+                
                 setLoading(false);
               } else {
                 setLoading(false);
@@ -72,8 +74,8 @@ const Movie = () => {
                                 <div className="w-2/6 hidden lg:flex justify-center">
 
                                     <div>
-                                        <img src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${Mymovie?.backdrop_path}`} className="w-full rounded border-3 border-zinc-500 -translate-y-30" />
-                                    </div>
+                                        <img src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${Mymovie?.poster_path}`} className="w-full rounded border-3 border-zinc-500 -translate-y-30" />
+                                    </div>  
 
                                 </div>
                                 <div className="w-5/6 px-4">
