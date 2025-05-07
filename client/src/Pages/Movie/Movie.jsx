@@ -4,9 +4,12 @@ import { useParams } from "react-router-dom"
 import { useEffect, useState } from 'react'
 import { movie } from '../../apis/movies'
 import toast, { Toaster } from "react-hot-toast"
+import axios from "axios"
+
 
 const Movie = () => {
 
+    const [review, setReview] = useState("");
     const [loading, setLoading] = useState(true);
     const [Mymovie, setMovie] = useState(null)
     const { id } = useParams();
@@ -27,6 +30,21 @@ const Movie = () => {
 
         fetchMovies();
     }, [id]);
+
+    const handleSubmit = async()=>{
+      try{
+
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/movies/review`, {movieId: id, content: review}, { withCredentials: true, });
+        
+        console.log(response);
+        
+
+      }catch(error){
+        console.log("Error", error);
+        
+      }
+
+    }
 
     return (
         <>
@@ -125,10 +143,12 @@ const Movie = () => {
 <textarea 
 name="review" 
 id="review" 
+value={review}
+onChange={(e)=> setReview(e.target.value)}
 placeholder='Your review'
 className='w-full p-2 bg-zinc-800 text-white rounded my-3 h-30 resize-none border border-zinc-500 outline-0'
 ></textarea>
-<button className='bg-amber-500 px-2 py-1 text-white rounded cursor-pointer'>
+<button onClick={handleSubmit} className='bg-amber-500 px-2 py-1 text-white rounded cursor-pointer'>
   Submit Review
 </button>
 
