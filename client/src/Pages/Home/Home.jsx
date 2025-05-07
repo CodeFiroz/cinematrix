@@ -51,10 +51,47 @@ const Home = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
-                        <ReviewCard />
-                        <ReviewCard />
-                        <ReviewCard />
-                        <ReviewCard />
+                    <ReviewCard
+  image="https://media.themoviedb.org/t/p/w220_and_h330_face//tB66c6dnu9dG60mta8TF8zmeGJn.jpg"
+  reviewText="One of the best self-drive experiences I've had! Super smooth pickup process."
+  rating={4}
+  likes="1.2k"
+  replies={12}
+  user="@IronMan"
+  timeAgo="5 hours ago"
+  avatar="https://preview.redd.it/bcyq3rjk2w071.png?auto=webp&s=97c9b873f1b41a7b9ff31331fd92f2e3fafed92f"
+/>
+<ReviewCard
+  image="https://media.themoviedb.org/t/p/w220_and_h330_face//tB66c6dnu9dG60mta8TF8zmeGJn.jpg"
+  reviewText="One of the best self-drive experiences I've had! Super smooth pickup process."
+  rating={4}
+  likes="1.2k"
+  replies={12}
+  user="@IronMan"
+  timeAgo="5 hours ago"
+  avatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyIGN4Z5LDVT7hl8sk76cZ4FU1mdkB5LIm7g&s"
+/>
+<ReviewCard
+  image="https://media.themoviedb.org/t/p/w220_and_h330_face//kMDUS7VmFhb2coRfVBoGLR8ADBt.jpg"
+  reviewText="One of the best self-drive experiences I've had! Super smooth pickup process."
+  rating={4}
+  likes="1.2k"
+  replies={12}
+  user="@IronMan"
+  timeAgo="5 hours ago"
+  avatar="https://cdn.prod.website-files.com/62bdc93e9cccfb43e155104c/66d474340f28fd3b2645b0a9_gojo%20pfp%20400x400%20(12).png"
+/>
+<ReviewCard
+  image="https://media.themoviedb.org/t/p/w220_and_h330_face//cAoktVUBhGyULRoxV6mZ2LB3x7I.jpg"
+  reviewText="One of the best self-drive experiences I've had! Super smooth pickup process."
+  rating={4}
+  likes="1.2k"
+  replies={12}
+  user="@IronMan"
+  timeAgo="5 hours ago"
+  avatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjspNyVZ_RBiG68niLT-38T93kitl5Qk5nNw&s"
+/>
+
 
                     </div>
 
