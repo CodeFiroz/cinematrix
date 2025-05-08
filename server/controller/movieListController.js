@@ -33,7 +33,7 @@ export const getMoviesList = async (req, res) => {
             console.log("Serving from database cache 👴");
             return res.status(200).json({
                 success: true,
-                data : cache.data
+                data: cache.data
             });
         }
 
@@ -71,7 +71,7 @@ export const getMoviesList = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            data : movies
+            data: movies
         });
 
     } catch (err) {
@@ -100,14 +100,12 @@ export const getMovie = async (req, res) => {
         const cache = await MoviesCache.findOne({ movie_id: id });
 
         if (cache) {
-            console.log("Serving from database cache 👴");
             return res.status(200).json({
                 success: true,
-                data : cache.data
+                data: cache.data
             });
         }
 
-        console.log("Fetching from TMDB 🌐");
 
         const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US`;
 
@@ -122,8 +120,7 @@ export const getMovie = async (req, res) => {
 
         const movieDetail = tmdbResponse.data;
 
-        console.log(movieDetail);
-        
+
 
         const saveCache = new MoviesCache({
             movie_id: id,
@@ -135,7 +132,7 @@ export const getMovie = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            data : movieDetail
+            data: movieDetail
         });
 
     } catch (err) {

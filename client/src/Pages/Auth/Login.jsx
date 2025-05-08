@@ -68,7 +68,6 @@ const Login = () => {
       try {
         const loginResponse = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, formdata, { withCredentials: true, });
         setAuth({ user: loginResponse.data.user });
-
         
         toast.success("Successfully login");
         setFormdata({

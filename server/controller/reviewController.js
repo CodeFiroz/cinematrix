@@ -34,3 +34,29 @@ export const addReview = async (req, res)=>{
     }
 
 }
+
+export const getReview = async (req, res)=>{
+
+    const {movieId} = req.params;
+
+    if(!movieId){
+        return res.status(400).json({
+            success: false,
+            message: "Invalid movie id",
+        })
+    }
+    try{
+
+
+        const reviews = await MovieReview.find({movieId}).populate('userId').populate("movieId");
+
+        return res.status(200).json({
+            success: true,
+            reviews: reviews
+        })
+    }catch (err) {
+        console.log(`get Review error :: ${err}`);
+        return res.status(500).json({ success: false, message: "Oops! We're having server issues. Try again later." });
+    }
+
+}

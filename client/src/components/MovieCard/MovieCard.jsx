@@ -3,17 +3,15 @@ import { Link } from "react-router-dom"
 const MovieCard = (props) => {
   return (
     <>
-        <div>
-           <Link to={`/movie/${props.id}`}>
-           <img 
-              src={props.image} 
-              className='w-full border-4 border-zinc-400 rounded-2xl hover:border-amber-500 duration-200 hover:scale-95'
-            />
-            <h4>
-              {props.title}
-            </h4>
-           </Link>
-        </div>
+      <div>
+        <Link to={`/movie/${props.id}`}>
+
+          <img
+            src={props.image}
+            className='w-full rounded-2xl border-2 border-zinc-500 duration-200 ease-in-out hover:scale-95 hover:border-8 hover:border-amber-400'
+          />
+        </Link>
+      </div>
 
     </>
   )

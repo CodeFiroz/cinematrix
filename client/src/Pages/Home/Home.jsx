@@ -1,36 +1,11 @@
 import MovieCard from "../../components/MovieCard/MovieCard"
 import ReviewCard from "../../components/ReviewCard/ReviewCard"
 import Hero from "./Hero"
-
-import { movieslist } from "../../apis/movies"
-import { useState, useEffect } from "react"
+import { useFetchMoviesList } from "../../hooks/useMovie"
 
 const Home = () => {
-
-    const useFetchMovies = (type) => {
-        const [movies, setMovies] = useState([]);
-
-        useEffect(() => {
-            const fetchMovies = async () => {   
-                const result = await movieslist(type);
-                console.log(result);
-                
-                if (result.success) {
-                    setMovies(result.movies.data.slice(0, 12)); 
-                } else {
-                    console.error(`Failed to fetch ${type} movies:`, result.message);
-                }
-            };
-
-            fetchMovies();
-        }, [type]);
-
-        return movies;
-    };
-
-
-    const popularMovies = useFetchMovies("upcoming");
-    const topRatedMovies = useFetchMovies("top_rated");
+    const popularMovies = useFetchMoviesList("upcoming");
+    const topRatedMovies = useFetchMoviesList("top_rated");
 
 
 
@@ -39,7 +14,7 @@ const Home = () => {
 
 
             <div className="flex justify-center">
-                <div className="w-full lg:max-w-8/10 px-8">
+                <div className="w-full px-15">
                     <Hero />
 
 
