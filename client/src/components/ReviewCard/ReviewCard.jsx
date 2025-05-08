@@ -15,7 +15,6 @@ const ReviewCard = ({ image, reviewText, rating = 5, likes = '24k', replies = 12
             </div>
           ) : null
         }
-
         {/* Text Section */}
         <div className={`${image ? 'w-4/5' : 'w-full'}`}>
           <p className='text-sm text-zinc-500 mb-3'>

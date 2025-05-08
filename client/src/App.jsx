@@ -11,6 +11,7 @@ import ResetPassword from './Pages/Auth/ResetPassword'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useAuthStore } from './store/authStore'
 import { useEffect } from 'react'
+import MovieDetails from './Pages/Movie/MovieDetails'
 
 
 const App = () => {
@@ -29,7 +30,8 @@ const App = () => {
         <Header />
         <Routes>
           <Route path='/' element={<Home />}></Route>
-          <Route path='/movie/:id' element={<Movie />}></Route>
+          <Route path='/movie/:id' element={<MovieDetails />}></Route>
+          <Route path='/movie' element={<MovieDetails />}></Route>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/register' element={<Register />}></Route>
           <Route path='/forgot-password' element={<ForgotPassword />}></Route>

@@ -27,9 +27,11 @@ export const useFetchMoviesList = (type) => {
 
 export const useFetchMovies = (id) => {
     const [movies, setMovies] = useState(null);
+    const [loading, setLoading]= useState(true)
     
     useEffect(() => {
         const fetchMovies = async () => {
+            setLoading(true);
             try {
                 const MovieResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/movies/${id}`);
                 if (MovieResponse.data.success) {
@@ -39,19 +41,24 @@ export const useFetchMovies = (id) => {
                 }
             } catch (error) {
                 console.error(`Error fetching ${id} movies:`, error.message);
+            } finally {
+                setLoading(false)
             }
         };
 
         fetchMovies();
     }, [id]);
 
-    return movies;
+    return { data : movies, isLoading: loading};
 };
 
 export const useGetMovieReview = (id) => {
     const [reviews, setReviews] = useState([]);
+    const [loading, setLoading]= useState(true)
+
     
     useEffect(() => {
+        setLoading(true)
         const fetchMoviesReviews = async () => {
             try {
                 const MovieResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/movies/review/${id}`);
@@ -63,13 +70,15 @@ export const useGetMovieReview = (id) => {
                 }
             } catch (error) {
                 console.error(`Error fetching ${id} movies review:`, error.message);
+            } finally {
+                setLoading(false)
             }
         };
 
         fetchMoviesReviews();
     }, [id]);
 
-    return reviews;
+    return { data : reviews, isLoading: loading};
 };
 
 
