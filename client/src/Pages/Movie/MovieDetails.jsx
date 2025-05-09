@@ -1,15 +1,14 @@
 import React from 'react';
 import Review from '../../components/Review/Review';
 import { useFetchMovies, useGetMovieReview } from '../../hooks/useMovie';
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+import StarRating from '../../components/StarRating/StarRating';
 
 const MovieDetails = () => {
   const { id } = useParams();
-  const { data: Fetchmovie, isLoading: isMovieLoading } = useFetchMovies(id);
-  const { data: MovieReviews, isLoading: isReviewLoading } = useGetMovieReview(id);
+  const { data: movie, isLoading: isMovieLoading } = useFetchMovies(id);
+  const { data: reviews, isLoading: isReviewLoading } = useGetMovieReview(id);
 
-  
-  
   if (isMovieLoading || isReviewLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-black text-white">
@@ -21,83 +20,109 @@ const MovieDetails = () => {
   return (
     <div className="w-full">
       <div
-        className="w-full relative h-[400px] rounded my-3 p-5 flex justify-start items-end bg-cover bg-center"
+        className="w-full relative h-[400px] rounded my-3 p-5 flex justify-start items-end bg-cover bg-center transition-all duration-1500"
         style={{
-          backgroundImage: `url("https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${Fetchmovie?.backdrop_path}")`,
+          backgroundImage: `url("https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie?.backdrop_path}")`,
         }}
       >
-        <div className="absolute inset-0 bg-black opacity-80 rounded"></div>
+        <div className="absolute inset-0 bg-black/80 rounded"></div>
       </div>
 
       <div className="flex justify-center gap-5">
-        <div className="w-2/6 hidden lg:flex flex-col px-5">
-          <div className="sticky top-40 flex flex-col items-center justify-center -translate-y-30">
+        {/* Sidebar Poster */}
+        <aside className="w-2/6 hidden lg:flex flex-col px-5">
+          <div className="sticky top-40 flex flex-col items-center justify-center">
             <img
-              src={`https://media.themoviedb.org/t/p/w600_and_h900_face/${Fetchmovie?.poster_path}`}
-              className="w-70 rounded border-4 border-zinc-500"
+              src={`https://media.themoviedb.org/t/p/w600_and_h900_face/${movie?.poster_path}`}
+              className="w-60 rounded-xl border-4 border-zinc-500 shadow-lg transition-transform duration-300 hover:scale-105"
               alt="Movie Poster"
             />
-            <a href={Fetchmovie?.homepage} target='_blank' className="py-1 px-10 mt-3 bg-amber-600 text-white">
+            <a
+              href={movie?.homepage}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="py-1 px-8 mt-4 bg-amber-600 text-white rounded-full hover:bg-amber-700 transition-colors"
+            >
               Know More
             </a>
           </div>
-        </div>
+        </aside>
 
-        <div className="w-full lg:w-5/6 px-4 pb-20 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800">
-          <h1 className="font-bebas text-6xl text-zinc-50 mt-5">
-            {Fetchmovie?.title || 'blank'}
+        {/* Main Content */}
+        <main className="w-full lg:w-5/6 px-4 pb-20 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800">
+          <h1 className="font-bebas text-6xl text-zinc-50 mt-5 mb-2">
+            {movie?.title || 'Untitled'}
           </h1>
 
-          <p className="text-zinc-300">
-            {Fetchmovie?.genres.map((genre, index) => (
+          <p className="text-zinc-300 text-sm mb-4">
+            {movie?.genres?.map((genre, index) => (
               <span key={index} className="mr-2">
-                {genre.name}  {Fetchmovie?.genres.length - 1 > Fetchmovie?.genres.length ? '': ', '}
+                {genre.name}{index < movie.genres.length - 1 ? ',' : ''}
               </span>
             ))}
           </p>
 
-          <h4 className="font-bebas text-2xl mt-5 text-white">Overview :</h4>
-          <i>{Fetchmovie?.overview || '...'}</i>
+          <section className="text-white space-y-4">
+            <div>
+              <h4 className="font-bebas text-2xl">Overview:</h4>
+              <p className="italic text-zinc-300">{movie?.overview || 'No overview available.'}</p>
+            </div>
 
-          <p className="mt-4 text-zinc-200">
-            <b>Release Year:</b> {Fetchmovie?.release_date}
-          </p>
+            <p className="text-zinc-200">
+              <strong>Release Year:</strong> {movie?.release_date || 'Unknown'}
+            </p>
 
-          <div className="flex items-center mb-10 gap-2">
-            <a
-              href="#"
-              className="inline-flex items-center mt-4 px-5 text-sm py-1 border-2 border-amber-700 rounded bg-amber-600 text-white"
-            >
-              <i className="fi fi-rr-film mt-1 mr-4"></i>
-              Add to List
-            </a>
-          </div>
+            <div className="flex items-center mb-10 gap-2">
+              <a
+                href="#"
+                className="inline-flex items-center mt-4 px-5 py-1 border-2 border-amber-700 rounded-full bg-amber-600 text-white hover:bg-amber-700 transition"
+              >
+                🎬 Add to List
+              </a>
+            </div>
+          </section>
 
-          <h2 className="text-2xl font-bold text-zinc-50 mb-10">Add Your Review</h2>
+          {/* Review Input Box */}
+          <section className="bg-zinc-800 p-6 rounded-xl border border-zinc-600 shadow-md w-full mx-auto space-y-4 transition-all">
+            <h3 className="text-xl font-semibold text-white">Leave a Review</h3>
 
+            <textarea
+              className="w-full bg-zinc-700 text-white placeholder-gray-400 p-4 rounded-lg focus:ring-2 focus:ring-amber-400 outline-none resize-none min-h-[120px] transition-all duration-200"
+              name="review"
+              id="review"
+              placeholder="Your experience about this movie..."
+            ></textarea>
 
-          {
-                MovieReviews?.map((review, index) => (
-                  <Review
-                    key={index}
-                    reviewText={review.content}
-                    rating={5}
-                    likes="1.2k"
-                    replies={12}
-                    user={review.userId.username}
-                    time={review.createdAt}
-                    avatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjspNyVZ_RBiG68niLT-38T93kitl5Qk5nNw&s"
-                  />
-                ))
-              }
+            <div className="flex justify-between items-center">
+              <StarRating />
+              <button
+                className="rounded-full bg-amber-500 hover:bg-amber-600 active:scale-95 px-8 py-2 text-white font-medium border-2 border-amber-400 transition-all duration-200 shadow-sm"
+              >
+                Post Review
+              </button>
+            </div>
+          </section>
 
-
-
-          
-
-
-
-        </div>
+          {/* User Reviews */}
+          <section className="mt-10 space-y-6">
+            {reviews?.length ? (
+              reviews.map((review, index) => (
+                <Review
+                  key={index}
+                  reviewText={review.content}
+                  rating={5} // Ideally this should come from review.rating
+                  likes="1.2k"
+                  replies={12}
+                  user={review.userId.username}
+                  time={review.createdAt}
+                  avatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjspNyVZ_RBiG68niLT-38T93kitl5Qk5nNw&s"
+                />
+              ))
+            ) : (
+              <p className="text-zinc-400">No reviews yet. Be the first to drop a hot take!</p>
+            )}
+          </section>
+        </main>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ const ReviewCard = ({ image, reviewText, rating = 5, likes = '24k', replies = 12
   return (
     <div className="w-full mt-3">
       <div className="flex mt-3 gap-2">
-        
+
         {/* If image exists, render the image box */}
         {
           image ? (
