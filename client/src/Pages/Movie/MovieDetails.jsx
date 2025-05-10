@@ -2,12 +2,20 @@ import React from 'react';
 import Review from '../../components/Review/Review';
 import { useFetchMovies, useGetMovieReview } from '../../hooks/useMovie';
 import { useParams } from 'react-router-dom';
-import StarRating from '../../components/StarRating/StarRating';
+import { ScrollToTop } from '../../lib/Accessibilities';
+import { useEffect } from 'react';
+import ReviewBox from '../../components/ReviewBox/ReviewBox';
 
 const MovieDetails = () => {
+
+  useEffect(()=>{
+    ScrollToTop();
+  }, [])
+
   const { id } = useParams();
   const { data: movie, isLoading: isMovieLoading } = useFetchMovies(id);
   const { data: reviews, isLoading: isReviewLoading } = useGetMovieReview(id);
+  
 
   if (isMovieLoading || isReviewLoading) {
     return (
@@ -37,14 +45,7 @@ const MovieDetails = () => {
               className="w-60 rounded-xl border-4 border-zinc-500 shadow-lg transition-transform duration-300 hover:scale-105"
               alt="Movie Poster"
             />
-            <a
-              href={movie?.homepage}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="py-1 px-8 mt-4 bg-amber-600 text-white rounded-full hover:bg-amber-700 transition-colors"
-            >
-              Know More
-            </a>
+          
           </div>
         </aside>
 
@@ -83,39 +84,23 @@ const MovieDetails = () => {
           </section>
 
           {/* Review Input Box */}
-          <section className="bg-zinc-800 p-6 rounded-xl border border-zinc-600 shadow-md w-full mx-auto space-y-4 transition-all">
-            <h3 className="text-xl font-semibold text-white">Leave a Review</h3>
-
-            <textarea
-              className="w-full bg-zinc-700 text-white placeholder-gray-400 p-4 rounded-lg focus:ring-2 focus:ring-amber-400 outline-none resize-none min-h-[120px] transition-all duration-200"
-              name="review"
-              id="review"
-              placeholder="Your experience about this movie..."
-            ></textarea>
-
-            <div className="flex justify-between items-center">
-              <StarRating />
-              <button
-                className="rounded-full bg-amber-500 hover:bg-amber-600 active:scale-95 px-8 py-2 text-white font-medium border-2 border-amber-400 transition-all duration-200 shadow-sm"
-              >
-                Post Review
-              </button>
-            </div>
-          </section>
+         <ReviewBox 
+          movieId={id}
+         />
 
           {/* User Reviews */}
           <section className="mt-10 space-y-6">
             {reviews?.length ? (
               reviews.map((review, index) => (
                 <Review
+                  reviewId={review._id}
                   key={index}
                   reviewText={review.content}
-                  rating={5} // Ideally this should come from review.rating
-                  likes="1.2k"
-                  replies={12}
-                  user={review.userId.username}
+                  rating={review.rating} // Ideally this should come from review.rating
+                  likes={review.likes.length}
+                  replies={review.replies}
+                  user={review.userId}
                   time={review.createdAt}
-                  avatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjspNyVZ_RBiG68niLT-38T93kitl5Qk5nNw&s"
                 />
               ))
             ) : (

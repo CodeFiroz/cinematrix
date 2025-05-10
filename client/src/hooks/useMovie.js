@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const useFetchMoviesList = (type) => {
     const [movies, setMovies] = useState([]);
-    
+
     useEffect(() => {
         const fetchMoviesList = async () => {
             try {
@@ -27,8 +27,8 @@ export const useFetchMoviesList = (type) => {
 
 export const useFetchMovies = (id) => {
     const [movies, setMovies] = useState(null);
-    const [loading, setLoading]= useState(true)
-    
+    const [loading, setLoading] = useState(true)
+
     useEffect(() => {
         const fetchMovies = async () => {
             setLoading(true);
@@ -49,22 +49,22 @@ export const useFetchMovies = (id) => {
         fetchMovies();
     }, [id]);
 
-    return { data : movies, isLoading: loading};
+    return { data: movies, isLoading: loading };
 };
 
 export const useGetMovieReview = (id) => {
     const [reviews, setReviews] = useState([]);
-    const [loading, setLoading]= useState(true)
+    const [loading, setLoading] = useState(true)
 
-    
+
     useEffect(() => {
         setLoading(true)
         const fetchMoviesReviews = async () => {
             try {
                 const MovieResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/movies/review/${id}`);
-                
+
                 if (MovieResponse.data.success) {
-                    setReviews(MovieResponse.data.reviews);
+                    setReviews(MovieResponse.data.data);
                 } else {
                     console.error(`Failed to fetch ${id} movies review:`, MovieResponse.data.message);
                 }
@@ -78,7 +78,43 @@ export const useGetMovieReview = (id) => {
         fetchMoviesReviews();
     }, [id]);
 
-    return { data : reviews, isLoading: loading};
+    return { data: reviews, isLoading: loading };
+};
+
+export const AddMoviesReviews = async (movieid, content, rating) => {
+    try {
+        const MovieResponse = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/movies/review`, {
+            movieId: movieid,
+            content: content,
+            rating: rating
+        }, { withCredentials: true });
+
+        if (MovieResponse.data.success) {
+            return true;
+        } else {
+            console.error(`Failed to fetch ${movieid} movies review:`, MovieResponse.data.message);
+            return false;
+        }
+    } catch (error) {
+        console.error(`Error fetching ${movieid} movies review:`, error.message);
+        return false;
+    }
+};
+
+export const AddReply = async (formdata) => {
+    try {
+        const Reply = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/movies/reply`, formdata, { withCredentials: true });
+
+        if (Reply.data.success) {
+            return true;
+        } else {
+            console.error(`Failed to fetch  movies review:`, Reply.data.message);
+            return false;
+        }
+    } catch (error) {
+        console.error(`Error fetching  movies review:`, error.message);
+        return false;
+    }
 };
 
 
