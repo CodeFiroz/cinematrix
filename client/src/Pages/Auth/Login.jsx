@@ -17,8 +17,8 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [formdata, setFormdata] = useState({
-    username: 'khanfiroz4045@gmail.com',
-    password: '12345678'
+    username: '',
+    password: ''
   });
 
   const [formerrors, setFormErrors] = useState({

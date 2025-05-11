@@ -93,14 +93,8 @@ const MovieDetails = () => {
             {reviews?.length ? (
               reviews.map((review, index) => (
                 <Review
-                  reviewId={review._id}
                   key={index}
-                  reviewText={review.content}
-                  rating={review.rating} // Ideally this should come from review.rating
-                  likes={review.likes.length}
-                  replies={review.replies}
-                  user={review.userId}
-                  time={review.createdAt}
+                  reviewData={review}
                 />
               ))
             ) : (

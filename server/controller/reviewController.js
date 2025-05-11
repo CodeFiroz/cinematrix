@@ -136,3 +136,60 @@ export const addReply = async (req, res) => {
         });
     }
 };
+
+export const LikeReview = async (req, res) => {
+    const { reviewId } = req.body;
+
+    if (!reviewId) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields: 'reviewId'. Please check your input and try again.",
+        });
+    }
+
+    try {
+
+
+        const searchReview = await MovieReview.findById(reviewId);
+
+        if (!searchReview) {
+            return res.status(404).json({
+                success: false,
+                message: "Review not found. It may have been deleted or does not exist.",
+            });
+        }
+
+        const user = req.user;
+
+        if (searchReview.likes.includes(user._id)) {
+            await MovieReview.findByIdAndUpdate(reviewId, {
+                $pull: { likes: user._id },
+            });
+            return res.status(200).json({
+                success: true,
+                message: "Dislike the review.",
+            });
+
+        } else {
+            await MovieReview.findByIdAndUpdate(reviewId, {
+                $push: { likes: user._id },
+            });
+            return res.status(200).json({
+                success: true,
+                message: "Liked the review.",
+            });
+
+        }
+
+
+
+    } catch (err) {
+        console.error("❌ [Like Review Error]:", err.message, "on URL:", req.originalUrl);
+
+
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong on our end. Please try again in a moment.",
+        });
+    }
+};

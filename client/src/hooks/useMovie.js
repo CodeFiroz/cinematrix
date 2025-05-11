@@ -117,4 +117,18 @@ export const AddReply = async (formdata) => {
     }
 };
 
+export const LikeReview = async (reviewId) => {
+    try {
+        const Like = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/movies/review/like`, {reviewId}, { withCredentials: true });
 
+        if (Like.data.success) {
+            return true;
+        } else {
+            console.error(`Failed to fetch  movies review:`, Like.data.message);
+            return false;
+        }
+    } catch (error) {
+        console.error(`Error fetching  movies review:`, error.message);
+        return false;
+    }
+};

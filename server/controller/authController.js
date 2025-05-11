@@ -55,6 +55,7 @@ export const registerUser = async (req, res) => {
             success: true,
             message: `${username} is successfully registred.`,
             user: {
+                "id": savedUser._id,
                 "pfp": savedUser.profile_picture,
                 "username": savedUser.username,
                 "email": savedUser.email,
@@ -117,6 +118,7 @@ export const loginUser = async (req, res) => {
             success: true,
             message: `logged in`,
             user: {
+                "id": findUser._id,
                 "pfp": findUser.profile_picture,
                 "username": findUser.username,
                 "email": findUser.email
@@ -319,6 +321,7 @@ export const getCurrentUser = async (req, res) => {
             success: true,
             message: `signed in user`,
             user: {
+                "id": req.user.id,
                 "username": req.user.username,
                 "email": req.user.email
             } 
