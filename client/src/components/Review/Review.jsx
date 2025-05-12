@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { timeAgo } from '../../lib/Accessibilities'
-import { AddReply, LikeReview } from "../../hooks/useMovie";
+import { AddReply, LikeReview, DeleteReview } from "../../hooks/useMovie";
 import ReplyModel from './ReplyModel';
 import ReplyItem from './ReplyItem';
 import toast, { Toaster } from 'react-hot-toast';
@@ -47,20 +47,32 @@ const Review = ({
         setReplyData({ ...replydata, content: '' }); // clear content
     };
 
+    const handleDelete = ()=>{
+        if(DeleteReview(reviewData._id)){
+            toast.success("Deleted");
+        }else{
+            toast.error("Something went wrong. Try again")
+        }
+    }
+
     const handleLike = (reviewID) => {
-        
-        if (LikeReview(reviewID)) {
-              if (reviewData.likes?.includes(user.id) || isLiked) {
-                setLikeCount((LikeCount)=>LikeCount - 1)
-                setLiked(!isLiked);
-            }   else{
-                setLiked(!isLiked);
-                
-                setLikeCount((LikeCount)=>LikeCount + 1)
+
+        if (isLoggedIn) {
+            if (LikeReview(reviewID)) {
+                if (reviewData.likes?.includes(user.id) || isLiked) {
+                    setLikeCount((LikeCount) => LikeCount - 1)
+                    setLiked(!isLiked);
+                } else {
+                    setLiked(!isLiked);
+
+                    setLikeCount((LikeCount) => LikeCount + 1)
+                }
+            } else {
+                console.log("errror");
+
             }
         } else {
-            console.log("errror");
-
+            toast.error("You Need To login first.")
         }
     }
 
@@ -77,26 +89,37 @@ const Review = ({
 
             <div className='w-full p-3 bg-zinc-800 rounded border border-zinc-400 my-2'>
 
-                <div className='flex items-center gap-2'>
+                <div className='flex justify-between items-center gap-2'>
 
-                    <img src={avatar}
-                        className="w-10 h-10 object-cover rounded-full" />
-                    <div>
-                        <h4><a href="#" className='text-zinc-400'>@{reviewData.userId.username} - <span className='text-sm text-zinc-600'>{timeAgo(reviewData.createdAt)}</span></a></h4>
-                        <div className="stars text-xs text-amber-300 mt-[2px] ml-1">
+                    <div className="flex items-center gap-2">
+                        <img src={avatar} className="w-10 h-10 object-cover rounded-full" />
+                        <div>
+                            <h4><a href="#" className='text-zinc-400'>@{reviewData.userId.username} - <span className='text-sm text-zinc-600'>{timeAgo(reviewData.createdAt)}</span></a></h4>
+                            <div className="stars text-xs text-amber-300 mt-[2px] ml-1">
 
-                            {Array.from({ length: reviewData.rating }, (_, i) => (
-                                <i key={i} className="bx bxs-star"></i>
-                            ))}
+                                {Array.from({ length: reviewData.rating }, (_, i) => (
+                                    <i key={i} className="bx bxs-star"></i>
+                                ))}
 
-                            {Array.from({ length: 5 - reviewData.rating }, (_, i) => (
-                                <i key={i} className="bx bx-star"></i>
-                            ))}
+                                {Array.from({ length: 5 - reviewData.rating }, (_, i) => (
+                                    <i key={i} className="bx bx-star"></i>
+                                ))}
 
 
 
+                            </div>
                         </div>
                     </div>
+
+                    {
+                        isLoggedIn && reviewData.userId._id == user.id ? (
+                            <button
+                                onClick={handleDelete}
+                                className='h-10 w-10 rounded-full bg-red-500 text-white cursor-pointer'
+                            ><i className="bx bx-trash"></i></button>
+                        ) : ''
+                    }
+
 
                 </div>
 
@@ -119,11 +142,18 @@ const Review = ({
 
                     </div>
 
-                    <button className='text-sm text-zinc-400 cursor-pointer' onClick={() => setReplyToggle(!replyToggle)}>
-                        {
-                            reviewData.replies.length >= 0 ? `${replyToggle ? 'Hide' : 'Show'} all ${reviewData.replies.length} replies` : ''
-                        }
-                    </button>
+                    {
+
+                        reviewData.replies.length > 0 ? (
+                            <button className='text-sm text-zinc-400 cursor-pointer' onClick={() => setReplyToggle(!replyToggle)}>
+                                {
+                                    reviewData.replies.length >= 0 ? `${replyToggle ? 'Hide' : 'Show'} all ${reviewData.replies.length} replies` : ''
+                                }
+                            </button>
+                        ) : ''
+
+
+                    }
 
                 </div>
 

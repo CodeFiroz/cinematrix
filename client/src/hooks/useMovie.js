@@ -117,14 +117,51 @@ export const AddReply = async (formdata) => {
     }
 };
 
+export const DeleteReply = async (replyId) => {
+    try {
+        const Delete = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/movies/reply`, {
+            data: { replyId },
+            withCredentials: true
+        });
+        if (Delete.data.success) {
+            return true;
+        } else {
+            console.error(`Failed to fetch  movies review:`, Delete.data.message);
+            return false;
+        }
+    } catch (error) {
+        console.error(`Error fetching  movies review:`, error.message);
+        return false;
+    }
+};
+
+
 export const LikeReview = async (reviewId) => {
     try {
-        const Like = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/movies/review/like`, {reviewId}, { withCredentials: true });
+        const Like = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/movies/review/like`, { reviewId }, { withCredentials: true });
 
         if (Like.data.success) {
             return true;
         } else {
             console.error(`Failed to fetch  movies review:`, Like.data.message);
+            return false;
+        }
+    } catch (error) {
+        console.error(`Error fetching  movies review:`, error.message);
+        return false;
+    }
+};
+
+export const DeleteReview = async (reviewId) => {
+    try {
+        const Delete = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/movies/review`, {
+            data: { reviewId },
+            withCredentials: true
+        });
+        if (Delete.data.success) {
+            return true;
+        } else {
+            console.error(`Failed to fetch  movies review:`, Delete.data.message);
             return false;
         }
     } catch (error) {

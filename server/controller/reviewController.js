@@ -1,5 +1,6 @@
 import MovieReview from "../models/Review.js"
 import ReviewReply from "../models/Reply.js"
+import mongoose from "mongoose"
 
 export const addReview = async (req, res) => {
 
@@ -193,3 +194,124 @@ export const LikeReview = async (req, res) => {
         });
     }
 };
+
+export const DeleteReview = async (req, res) => {
+
+    const { reviewId } = req.body;
+
+
+
+    if (!reviewId) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields: 'reviewId'. Please check your input and try again.",
+        });
+
+    }
+    try {
+
+        const user = req.user;
+
+        
+        
+        const review = await MovieReview.findById(reviewId).populate('userId');
+        
+        if (!review) {
+            return res.status(400).json({
+                success: false,
+                message: "Can't find review.",
+            });
+        }
+
+        if (review.userId._id.toString() !== user._id.toString()) {
+
+           
+            return res.status(400).json({
+                success: false,
+                message: "You don't have permission to perform this task.",
+            });
+        }
+
+        if (mongoose.Types.ObjectId.isValid(reviewId)) {
+            await MovieReview.findOneAndDelete({ _id: reviewId });
+        } else {
+            throw new Error("Invalid review ID");
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Successfully delete the review.",
+        });
+
+    } catch (err) {
+        console.error("❌ [Delete Review Error]:", err.message, "on URL:", req.originalUrl);
+
+
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong on our end. Please try again in a moment.",
+        });
+    }
+
+}
+
+export const DeleteReply = async (req, res) => {
+
+    const { replyId } = req.body;
+
+
+
+    if (!replyId) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields: 'replyId'. Please check your input and try again.",
+        });
+
+    }
+    try {
+
+        const user = req.user;
+
+        
+        
+        const reply = await ReviewReply.findById(replyId).populate('userId');
+        
+        if (!reply) {
+            return res.status(400).json({
+                success: false,
+                message: "Can't find reply.",
+            });
+        }
+
+        if (reply.userId._id.toString() !== user._id.toString()) {
+
+          
+
+            return res.status(400).json({
+                success: false,
+                message: "You don't have permission to perform this task.",
+            });
+        }
+
+        if (mongoose.Types.ObjectId.isValid(replyId)) {
+            await ReviewReply.findOneAndDelete({ _id: replyId });
+        } else {
+            throw new Error("Invalid reply ID");
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Successfully delete the reply.",
+        });
+
+    } catch (err) {
+        console.error("❌ [Delete Reply Error]:", err.message, "on URL:", req.originalUrl);
+
+
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong on our end. Please try again in a moment.",
+        });
+    }
+
+}
