@@ -50,13 +50,13 @@ const Review = ({
     const handleLike = (reviewID) => {
         
         if (LikeReview(reviewID)) {
-              if (reviewData.likes?.includes(user.id) && isLiked) {
+              if (reviewData.likes?.includes(user.id) || isLiked) {
                 setLikeCount((LikeCount)=>LikeCount - 1)
                 setLiked(!isLiked);
             }   else{
                 setLiked(!isLiked);
                 
-                setLikeCount((LikeCount)=>LikeCount+1)
+                setLikeCount((LikeCount)=>LikeCount + 1)
             }
         } else {
             console.log("errror");
