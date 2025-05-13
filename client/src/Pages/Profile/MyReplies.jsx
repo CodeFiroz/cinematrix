@@ -2,7 +2,7 @@ import React from 'react'
 import MovieCard from '../../components/MovieCard/MovieCard'
 import { useFetchMoviesList } from '../../hooks/useMovie'
 
-const Profile = () => {
+const MyReplies = () => {
 
         const Movies = useFetchMoviesList("now_playing");
     
@@ -35,7 +35,7 @@ const Profile = () => {
                     <div className='mt-10 grid grid-cols-8 gap-2'>
 
                         <a
-                            className='text-amber-500 border-b-1 border-amber-400 text-center'
+                            className='text-zinc-500 border-b-1 border-zinc-400 text-center'
                             href="#">
                             My Watch List
                         </a>
@@ -54,7 +54,7 @@ const Profile = () => {
 
                         
                         <a
-                            className='text-zinc-500 border-b-1 border-zinc-400 text-center'
+                            className='text-ambers-500 border-b-1 border-ambers-400 text-center'
                             href="#">
                             My Replies
                         </a>
@@ -86,4 +86,4 @@ const Profile = () => {
     )
 }
 
-export default Profile
+export default MyReplies

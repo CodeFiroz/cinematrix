@@ -212,10 +212,10 @@ export const DeleteReview = async (req, res) => {
 
         const user = req.user;
 
-        
-        
+
+
         const review = await MovieReview.findById(reviewId).populate('userId');
-        
+
         if (!review) {
             return res.status(400).json({
                 success: false,
@@ -225,7 +225,7 @@ export const DeleteReview = async (req, res) => {
 
         if (review.userId._id.toString() !== user._id.toString()) {
 
-           
+
             return res.status(400).json({
                 success: false,
                 message: "You don't have permission to perform this task.",
@@ -272,10 +272,10 @@ export const DeleteReply = async (req, res) => {
 
         const user = req.user;
 
-        
-        
+
+
         const reply = await ReviewReply.findById(replyId).populate('userId');
-        
+
         if (!reply) {
             return res.status(400).json({
                 success: false,
@@ -285,7 +285,7 @@ export const DeleteReply = async (req, res) => {
 
         if (reply.userId._id.toString() !== user._id.toString()) {
 
-          
+
 
             return res.status(400).json({
                 success: false,
@@ -307,6 +307,86 @@ export const DeleteReply = async (req, res) => {
     } catch (err) {
         console.error("❌ [Delete Reply Error]:", err.message, "on URL:", req.originalUrl);
 
+
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong on our end. Please try again in a moment.",
+        });
+    }
+
+}
+
+export const getMyReplies = async (req, res) => {
+
+    try {
+
+
+        const user = req.user;
+
+        const replies = await ReviewReply.find({ userId: user._id })
+            .populate({
+                path: 'ReviewId',
+                populate: [
+                    {
+                        path: 'userId',
+                        select: 'name username profile_picture'
+                    }
+                ]
+            })
+            .sort({ createdAt: -1 });
+
+
+        if (!replies) {
+            return res.status(400).json({
+                success: false,
+                message: "Something went wrong . No Replies Found.",
+            });;
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "replies fetched successfully.",
+            data: replies
+        });
+
+    } catch (err) {
+        console.error("❌ [Fetching Review Error]:", err.message, "on URL:", req.originalUrl);
+
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong on our end. Please try again in a moment.",
+        });
+    }
+
+}
+
+export const getMyReviews = async (req, res) => {
+
+    try {
+
+
+        const user = req.user;
+
+        const review = await MovieReview.find({ userId: user._id })
+            .populate('replies')
+            .sort({ createdAt: -1 });
+
+
+        if (!replies) {
+            return res.status(400).json({
+                success: false,
+                message: "Something went wrong . No Replies Found.",
+            });;
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Reviews fetched successfully.",
+            data: review
+        });
+
+    } catch (err) {
+        console.error("❌ [Fetching Review Error]:", err.message, "on URL:", req.originalUrl);
 
         return res.status(500).json({
             success: false,
