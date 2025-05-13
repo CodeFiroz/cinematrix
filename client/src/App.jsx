@@ -12,6 +12,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useAuthStore } from './store/authStore'
 import { useEffect } from 'react'
 import MovieDetails from './Pages/Movie/MovieDetails'
+import Profile from './Pages/Profile/Profile'
 
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
           <Route path='/' element={<Home />}></Route>
           <Route path='/movie/:id' element={<MovieDetails />}></Route>
           <Route path='/movie' element={<MovieDetails />}></Route>
+          <Route path='/profile' element={<Profile />}></Route>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/register' element={<Register />}></Route>
           <Route path='/forgot-password' element={<ForgotPassword />}></Route>
