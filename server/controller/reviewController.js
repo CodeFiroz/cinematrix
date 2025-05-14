@@ -1,6 +1,7 @@
 import MovieReview from "../models/Review.js"
 import ReviewReply from "../models/Reply.js"
 import mongoose from "mongoose"
+import axios from "axios"
 
 export const addReview = async (req, res) => {
 
@@ -195,6 +196,63 @@ export const LikeReview = async (req, res) => {
     }
 };
 
+export const LikeReply = async (req, res) => {
+    const { replyId } = req.body;
+
+    if (!replyId) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields: 'replyId'. Please check your input and try again.",
+        });
+    }
+
+    try {
+
+
+        const searchReply = await ReviewReply.findById(replyId);
+
+        if (!searchReply) {
+            return res.status(404).json({
+                success: false,
+                message: "Reply not found. It may have been deleted or does not exist.",
+            });
+        }
+
+        const user = req.user;
+
+        if (searchReply.likes.includes(user._id)) {
+            await ReviewReply.findByIdAndUpdate(replyId, {
+                $pull: { likes: user._id },
+            });
+            return res.status(200).json({
+                success: true,
+                message: "Dislike the review.",
+            });
+
+        } else {
+            await ReviewReply.findByIdAndUpdate(replyId, {
+                $push: { likes: user._id },
+            });
+            return res.status(200).json({
+                success: true,
+                message: "Liked the review.",
+            });
+
+        }
+
+
+
+    } catch (err) {
+        console.error("❌ [Like Review Error]:", err.message, "on URL:", req.originalUrl);
+
+
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong on our end. Please try again in a moment.",
+        });
+    }
+};
+
 export const DeleteReview = async (req, res) => {
 
     const { reviewId } = req.body;
@@ -332,7 +390,7 @@ export const getMyReplies = async (req, res) => {
                         select: 'name username profile_picture'
                     }
                 ]
-            })
+            }).populate('userId')
             .sort({ createdAt: -1 });
 
 
@@ -360,38 +418,64 @@ export const getMyReplies = async (req, res) => {
 
 }
 
+
 export const getMyReviews = async (req, res) => {
+  try {
+    const user = req.user;
 
-    try {
+    const reviews = await MovieReview.find({ userId: user._id })
+      .populate('replies')
+      .sort({ createdAt: -1 });
 
-
-        const user = req.user;
-
-        const review = await MovieReview.find({ userId: user._id })
-            .populate('replies')
-            .sort({ createdAt: -1 });
-
-
-        if (!replies) {
-            return res.status(400).json({
-                success: false,
-                message: "Something went wrong . No Replies Found.",
-            });;
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: "Reviews fetched successfully.",
-            data: review
-        });
-
-    } catch (err) {
-        console.error("❌ [Fetching Review Error]:", err.message, "on URL:", req.originalUrl);
-
-        return res.status(500).json({
-            success: false,
-            message: "Something went wrong on our end. Please try again in a moment.",
-        });
+    if (!reviews || reviews.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No reviews found.",
+      });
     }
 
-}
+    // Attach TMDB movie details to each review
+    const reviewsWithMovie = await Promise.all(
+      reviews.map(async (review) => {
+        let movie = null;
+
+        try {
+          const tmdbRes = await axios.get(
+            `https://api.themoviedb.org/3/movie/${review.movieId}?language=en-US`,
+            {
+              headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+              }
+            }
+          );
+          movie = tmdbRes.data;
+        } catch (err) {
+          console.error(`TMDB fetch failed for movieId ${review.movieId}:`, err.message);
+        }
+
+        return {
+          ...review.toObject(),
+          movie: movie || null,
+        };
+      })
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Reviews fetched successfully.",
+      data: reviewsWithMovie,
+    });
+
+
+
+  } catch (err) {
+    console.error("❌ [Fetching Review Error]:", err.message, "on URL:", req.originalUrl);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later.",
+    });
+  }
+};
+

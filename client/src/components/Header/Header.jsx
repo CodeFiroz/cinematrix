@@ -50,24 +50,30 @@ const Header = () => {
                                 />
                                 <span className="text-sm font-semibold text-zinc-400">{user.username}</span>
                                 <div className={`w-50 bg-stone-900 p-1 rounded absolute z-50 right-0 top-14 ${profileMenu ? 'block' : 'hidden'}`}>
-                                    <a href="#"
+                                    <Link to="/profile"
                                         className="flex items-center gap-3 px-2 py-1 rounded hover:bg-stone-700 hover:text-white"
                                     >
                                         <i className="fi fi-rr-user mt-1"></i>
                                         <span className="font-bebas">My Profile</span>
-                                    </a>
-                                    <a href="#"
+                                    </Link>
+                                    <Link to="/profile"
                                         className="flex items-center gap-3 px-2 py-1 rounded hover:bg-stone-700 hover:text-white"
                                     >
                                         <i className="fi fi-rr-film mt-1"></i>
                                         <span className="font-bebas">My List</span>
-                                    </a>
-                                    <a href="#"
+                                    </Link>
+                                    <Link to="/my-reviews"
                                         className="flex items-center gap-3 px-2 py-1 rounded hover:bg-stone-700 hover:text-white"
                                     >
                                         <i className="fi fi-rr-star mt-1"></i>
                                         <span className="font-bebas">My Review</span>
-                                    </a>
+                                    </Link>
+                                       <Link to="/my-replies"
+                                        className="flex items-center gap-3 px-2 py-1 rounded hover:bg-stone-700 hover:text-white"
+                                    >
+                                        <i className="fi fi-rr-reply-all mt-1"></i>
+                                        <span className="font-bebas">My Replies</span>
+                                    </Link>
                                     <a href="#"
                                         className="flex items-center gap-3 px-2 py-1 rounded hover:bg-stone-700 hover:text-white"
                                     >

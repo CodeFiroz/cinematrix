@@ -94,7 +94,7 @@ const Review = ({
                     <div className="flex items-center gap-2">
                         <img src={avatar} className="w-10 h-10 object-cover rounded-full" />
                         <div>
-                            <h4><a href="#" className='text-zinc-400'>@{reviewData.userId.username} - <span className='text-sm text-zinc-600'>{timeAgo(reviewData.createdAt)}</span></a></h4>
+                            <h4><a href="#" className='text-zinc-400'>@{reviewData.userId?.username} - <span className='text-sm text-zinc-600'>{timeAgo(reviewData.createdAt)}</span></a></h4>
                             <div className="stars text-xs text-amber-300 mt-[2px] ml-1">
 
                                 {Array.from({ length: reviewData.rating }, (_, i) => (
@@ -135,7 +135,7 @@ const Review = ({
                             <span className='text-sm'>{LikeCount}</span>
                         </button>
 
-                        <button onClick={() => replyTo(reviewData.userId._id, reviewData.userId.username)} className='flex items-center gap-1 px-3 py-1 border border-zinc-300 rounded-2xl hover:bg-amber-500 hover:border-amber-500 text-white cursor-pointer'>
+                        <button onClick={() => replyTo(reviewData.userId?._id, reviewData.userId?.username)} className='flex items-center gap-1 px-3 py-1 border border-zinc-300 rounded-2xl hover:bg-amber-500 hover:border-amber-500 text-white cursor-pointer'>
                             <i className="bx bx-reply"></i>
                             <span className='text-sm'>Reply</span>
                         </button>
@@ -144,10 +144,10 @@ const Review = ({
 
                     {
 
-                        reviewData.replies.length > 0 ? (
+                        reviewData.replies?.length > 0 ? (
                             <button className='text-sm text-zinc-400 cursor-pointer' onClick={() => setReplyToggle(!replyToggle)}>
                                 {
-                                    reviewData.replies.length >= 0 ? `${replyToggle ? 'Hide' : 'Show'} all ${reviewData.replies.length} replies` : ''
+                                    reviewData.replies?.length >= 0 ? `${replyToggle ? 'Hide' : 'Show'} all ${reviewData.replies?.length} replies` : ''
                                 }
                             </button>
                         ) : ''
@@ -161,7 +161,7 @@ const Review = ({
 
             {replyToggle && (
                 <div className="pl-15">
-                    {reviewData.replies.map((reply, index) => (
+                    {reviewData.replies?.map((reply, index) => (
                         <ReplyItem key={index} reply={reply} />
                     ))}
                 </div>

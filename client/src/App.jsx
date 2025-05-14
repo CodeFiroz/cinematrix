@@ -13,6 +13,8 @@ import { useAuthStore } from './store/authStore'
 import { useEffect } from 'react'
 import MovieDetails from './Pages/Movie/MovieDetails'
 import Profile from './Pages/Profile/Profile'
+import Myreviews from './Pages/Profile/Myreviews'
+import MyReplies from './Pages/Profile/MyReplies'
 
 
 const App = () => {
@@ -34,6 +36,8 @@ const App = () => {
           <Route path='/movie/:id' element={<MovieDetails />}></Route>
           <Route path='/movie' element={<MovieDetails />}></Route>
           <Route path='/profile' element={<Profile />}></Route>
+          <Route path='/my-reviews' element={<Myreviews />}></Route>
+          <Route path='/my-replies' element={<MyReplies />}></Route>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/register' element={<Register />}></Route>
           <Route path='/forgot-password' element={<ForgotPassword />}></Route>

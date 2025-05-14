@@ -32,7 +32,13 @@ const UserSchema = mongoose.Schema({
     resetTokenExpire : {
         type: Date,
         default: null
-    }
+    },
+    watchlist : [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'MoviesCache',
+        }
+    ]
 });
 
 const User = mongoose.model('User', UserSchema);

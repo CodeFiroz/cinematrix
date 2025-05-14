@@ -1,6 +1,7 @@
 import MovieListCache from "../models/MovieListCache.js";
 import MoviesCache from "../models/MoviesCache.js";
 import axios from "axios";
+import User from "../models/User.js";
 
 export const getMoviesList = async (req, res) => {
 
@@ -138,6 +139,66 @@ export const getMovie = async (req, res) => {
     } catch (err) {
         console.log(`movie fetching error :: ${err}`);
         return res.status(500).json({ success: false, message: "Oops! We're having server issues. Try again later." });
+    }
+
+}
+
+
+export const toggleWatchlist = async (req, res) => {
+
+const { movieId } = req.body;
+
+    if (!movieId) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields: 'movieId'. Please check your input and try again.",
+        });
+    }
+
+    try {
+
+
+        const searchMovie = await MoviesCache.findById(movieId);
+
+        if (!searchMovie) {
+            return res.status(404).json({
+                success: false,
+                message: "Movie not found. It may have been deleted or does not exist.",
+            });
+        }
+
+        const user = req.user;
+
+        if (User.watchlist.includes(movieId)) {
+            await User.findByIdAndUpdate(user._id, {
+                $pull: { watchlist: movieId },
+            });
+            return res.status(200).json({
+                success: true,
+                message: "Remove the movie.",
+            });
+
+        } else {
+            await User.findByIdAndUpdate(user._id, {
+                $push: { watchlist: movieId },
+            });
+            return res.status(200).json({
+                success: true,
+                message: "Added to list.",
+            });
+
+        }
+
+
+
+    } catch (err) {
+        console.error("❌ [Toggle Watchlist Review Error]:", err.message, "on URL:", req.originalUrl);
+
+
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong on our end. Please try again in a moment.",
+        });
     }
 
 }
