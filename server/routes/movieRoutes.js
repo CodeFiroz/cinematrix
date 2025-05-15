@@ -1,11 +1,10 @@
 import express from "express";
-import { getMovie, getMoviesList, toggleWatchlist } from "../controller/movieListController.js";
+import { getMovie, getMoviesList } from "../controller/movieListController.js";
 import { addReply, addReview, DeleteReply, DeleteReview, getMyReplies, getMyReviews, getReview, LikeReply, LikeReview } from "../controller/reviewController.js";
 import protectRoute from "../Middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/watchlist/add", protectRoute, toggleWatchlist)
 router.get("/list/:key", getMoviesList)
 router.get("/:id", getMovie)
 router.delete("/review", protectRoute, DeleteReview)

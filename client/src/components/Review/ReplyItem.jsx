@@ -50,11 +50,7 @@ const ReplyItem = ({ reply }) => {
         <div className="flex justify-between items-start gap-2">
 
           <div className="flex gap-2">
-            <img
-              src="https://pfpmaker.com/content/img/profile-pictures/aesthetic/2.png"
-              className="w-8 h-8 mt-1 object-cover rounded-full"
-              alt="avatar"
-            />
+           
             {reply?.userId ? (
               <div>
                 <h4 className="text-zinc-400 text-xs">

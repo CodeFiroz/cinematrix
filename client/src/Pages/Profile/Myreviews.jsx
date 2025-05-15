@@ -21,12 +21,6 @@ const Myreviews = () => {
                     
                     <div className='mt-10 grid lg:grid-cols-8 grid-cols-3 gap-2'>
 
-                         <Link
-                                                  className='text-zinc-500 border-b-1 border-zinc-400 text-center'
-                                                  to="/profile">
-                                                  My Watch List
-                                              </Link>
-                      
                       
                       
                                               <Link

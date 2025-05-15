@@ -7,8 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useAuthStore } from '../../store/authStore';
 
 const Review = ({
-    reviewData,
-    avatar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjspNyVZ_RBiG68niLT-38T93kitl5Qk5nNw&s",
+    reviewData
 }) => {
 
     const { user, isLoggedIn } = useAuthStore();
@@ -92,7 +91,6 @@ const Review = ({
                 <div className='flex justify-between items-center gap-2'>
 
                     <div className="flex items-center gap-2">
-                        <img src={avatar} className="w-10 h-10 object-cover rounded-full" />
                         <div>
                             <h4><a href="#" className='text-zinc-400'>@{reviewData.userId?.username} - <span className='text-sm text-zinc-600'>{timeAgo(reviewData.createdAt)}</span></a></h4>
                             <div className="stars text-xs text-amber-300 mt-[2px] ml-1">

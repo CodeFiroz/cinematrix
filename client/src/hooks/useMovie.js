@@ -167,23 +167,6 @@ export const LikeReply = async (reviewId) => {
     }
 };
 
-export const addTowatchlist = async (movieId) => {
-    try {
-        const Movie = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/movies/watchlist/add`, { movieId }, { withCredentials: true });
-
-        if (Movie.data.success) {
-            return true;
-        } else {
-            console.error(`Failed to fetch  movies review:`, Movie.data.message);
-            return false;
-        }
-    } catch (error) {
-        console.error(`Error fetching  movies review:`, error.message);
-        return false;
-    }
-};
-
-
 export const DeleteReview = async (reviewId) => {
     try {
         const Delete = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/movies/review`, {

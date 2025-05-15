@@ -6,6 +6,7 @@ import { ScrollToTop } from '../../lib/Accessibilities';
 import { useEffect } from 'react';
 import ReviewBox from '../../components/ReviewBox/ReviewBox';
 
+
 const MovieDetails = () => {
 
   useEffect(()=>{
@@ -15,6 +16,7 @@ const MovieDetails = () => {
   const { id } = useParams();
   const { data: movie, isLoading: isMovieLoading } = useFetchMovies(id);
   const { data: reviews, isLoading: isReviewLoading } = useGetMovieReview(id);
+
   
 
   if (isMovieLoading || isReviewLoading) {
@@ -24,6 +26,7 @@ const MovieDetails = () => {
       </div>
     );
   }
+
 
   return (
     <div className="w-full">
@@ -63,7 +66,7 @@ const MovieDetails = () => {
             ))}
           </p>
 
-          <section className="text-white space-y-4">
+          <section className="text-white space-y-4 mb-10">
             <div>
               <h4 className="font-bebas text-2xl">Overview:</h4>
               <p className="italic text-zinc-300">{movie?.overview || 'No overview available.'}</p>
@@ -73,14 +76,6 @@ const MovieDetails = () => {
               <strong>Release Year:</strong> {movie?.release_date || 'Unknown'}
             </p>
 
-            <div className="flex items-center mb-10 gap-2">
-              <a
-                href="#"
-                className="inline-flex items-center mt-4 px-5 py-1 border-2 border-amber-700 rounded-full bg-amber-600 text-white hover:bg-amber-700 transition"
-              >
-                🎬 Add to List
-              </a>
-            </div>
           </section>
 
           {/* Review Input Box */}
